@@ -15,7 +15,7 @@ class HomeController extends Controller {
 
     const show = list.map(item => {
       return {
-        time: new Date(item.shift()).toDateString('Y-m-d H:i:s'),
+        time: new Date(item.shift()).toLocaleDateString('Y-m-d H:i:s'),
         open: item.shift(),
         high: item.shift(),
         low: item.shift(),
