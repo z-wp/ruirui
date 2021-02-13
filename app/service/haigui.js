@@ -8,7 +8,7 @@ class HaiguiService extends Service {
 
     // 计算康安奇通道和ATR
     const ohlcvList = await this.ctx.service.apiCcxt.OHLCV(symbol, timeframe, limit);
-    const ticker = await this.ctx.service.apiCcxt.platform().fetchTicker('ETH/USDT');
+    const ticker = await this.ctx.service.apiCcxt.platform().fetchTicker(symbol);
     const trList = []; const highList = []; const lowList = [];
     let forward;
     if (!ohlcvList) return null;
