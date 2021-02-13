@@ -7,8 +7,8 @@ class HomeController extends Controller {
   async index() {
     const { ctx } = this;
 
-    const huobi = new ccxt.huobipro();
-    ctx.body = await huobi.fetchMarket('ETH/USDT');
+    const okex = new ccxt.okex();
+    ctx.body = await okex.loadMarkets();
 
   }
 }
