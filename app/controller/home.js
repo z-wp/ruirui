@@ -11,7 +11,7 @@ class HomeController extends Controller {
       apiKey: '22ce605a-309b-43c8-a455-f9acde887113',
       secret: 'E69A9A2EAA14BF5A0DC4C4AE21D87C7C',
     });
-    ctx.body = await okex.fetchTrades('ETH/USDT');
+    ctx.body = await okex.fetchOHLCV('ETH/USDT');
 
   }
 }
