@@ -8,7 +8,7 @@ class HomeController extends Controller {
     const { ctx } = this;
 
     const huobi = new ccxt.huobipro();
-    ctx.body = await huobi.fetchMarkets();
+    ctx.body = await huobi.fetchMarket('ETH/USDT');
 
   }
 }
