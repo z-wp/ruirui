@@ -35,8 +35,8 @@ class HaiguiService extends Service {
     const atr = avg(trList);
     return {
       atr,
-      don_open: Math.max(highList),
-      don_close: Math.min(lowList),
+      don_open: Math.max(...highList),
+      don_close: Math.min(...lowList),
     };
   }
 }
