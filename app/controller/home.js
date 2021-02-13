@@ -1,28 +1,25 @@
 'use strict';
 
 const Controller = require('egg').Controller;
-const ccxt = require('ccxt');
+// const ccxt = require('ccxt');
 
 class HomeController extends Controller {
   async index() {
     const { ctx } = this;
 
-    const okex = new ccxt.okex({
-      apiKey: '22ce605a-309b-43c8-a455-f9acde887113',
-      secret: 'E69A9A2EAA14BF5A0DC4C4AE21D87C7C',
-    });
-    const list = await okex.fetchOHLCV('ETH/USDT', '1d', undefined, 20);
+    // const okex = new ccxt.okex(this.config.okex);
+    // const list = await okex.fetchOHLCV('ETH/USDT', '1d', undefined, 20);
 
-    const show = list.map(item => {
-      return {
-        time: new Date(item.shift()).toLocaleDateString(),
-        open: item.shift(),
-        high: item.shift(),
-        low: item.shift(),
-        close: item.shift(),
-      }
-    });
-    ctx.body = show;
+    // const show = list.map(item => {
+    //   return {
+    //     time: new Date(item.shift()).toLocaleDateString(),
+    //     open: item.shift(),
+    //     high: item.shift(),
+    //     low: item.shift(),
+    //     close: item.shift(),
+    //   }
+    // });
+    ctx.body = await this.ctx.service.apiCcxt.OHLCV('ETH/USDT', '1d');
   }
 }
 
