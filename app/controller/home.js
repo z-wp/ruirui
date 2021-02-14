@@ -25,7 +25,7 @@ class HomeController extends Controller {
 
     // ctx.body = await this.ctx.service.apiCcxt.OHLCV('ETH/USDT', '1d');
     // ctx.body = await this.ctx.service.haigui.algo('ETH/USDT');
-    ctx.body = await okex.fetchTrades('ETH/USDT', undefined, 5);
+    ctx.body = await okex.fetchTrades('ETH/USDT', undefined, 1);
 
   }
 }
