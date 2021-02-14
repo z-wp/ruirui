@@ -27,6 +27,11 @@ class ApiCcxtService extends Service {
 
   }
 
+  async lastClosePrice(symbol, timeframe = '1m') {
+    const data = await this.platform().fetchOHLCV(symbol, timeframe, undefined, 1);
+    return data && data[0][4];
+  }
+
 
 }
 
