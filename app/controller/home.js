@@ -32,7 +32,7 @@ class HomeController extends Controller {
     // };
     // ctx.body = await this.ctx.service.apiCcxt.lastClosePrice('ETH/USDT');
     // ctx.body = await this.ctx.service.haigui.unit('ETH/USDT');
-    ctx.body = await okex.fetchTotalBalance();
+    ctx.body = await okex.fetchCurrencies();
   }
 }
 
