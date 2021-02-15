@@ -45,11 +45,13 @@ class HaiguiService extends Service {
   // 计算买卖单位
   async unit(symbol, percent = 0.01, timeframe = '1d') {
     // 当前持有的usdt
-    const balance = await this.ctx.service.apiCcxt.spot('USDT');
+    const [ balance, algo ] = await Promise.all([
+      this.ctx.service.apiCcxt.spot('USDT'),
+      this.algo(symbol, timeframe),
+    ]);
     if (balance === null) return null;
     // eslint-disable-next-line dot-notation
     const usdt = balance['USDT'].free;
-    const algo = await this.algo(symbol, timeframe);
     if (algo && algo.atr) {
       return usdt * percent / algo.atr;
     }
