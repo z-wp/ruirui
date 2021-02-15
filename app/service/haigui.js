@@ -47,7 +47,8 @@ class HaiguiService extends Service {
     // 当前持有的usdt
     const balance = await this.ctx.service.apiCcxt.spot('USDT');
     if (balance === null) return null;
-    const usdt = balance.free;
+    // eslint-disable-next-line dot-notation
+    const usdt = balance['USDT'].free;
     const algo = await this.algo(symbol, timeframe);
     if (algo && algo.atr) {
       return usdt * percent / algo.atr;

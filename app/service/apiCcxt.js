@@ -33,10 +33,9 @@ class ApiCcxtService extends Service {
   }
 
   // 获取现货资金量 'account', 'spot', 'margin', 'futures', 'swap'
-  async spot(coin = 'USDT') {
-    const balance = await this.platform().fetchBalance({ type: 'spot' });
-    return balance && balance[coin] || null;
-    // {"free":42.67567516,"used":0,"total":42.67567516}
+  async spot() {
+    return await this.platform().fetchBalance({ type: 'spot' });
+    // ["USDT": {"free":42.67567516,"used":0,"total":42.67567516}]
   }
 
 }
