@@ -32,9 +32,9 @@ module.exports = appInfo => {
   };
 
   config.okex = {
-    apiKey: '22ce605a-309b-43c8-a455-f9acde887113',
-    secret: 'E69A9A2EAA14BF5A0DC4C4AE21D87C7C',
-    account: 'Xiaowei719899',
+    apiKey: '54b27c1a-05ed-4936-b4b5-f92b9f82f40f',
+    secret: 'EB7459716CCE1B19C8FAFABC419A1CEA',
+    password: 'Xiaowei719899730',
   };
 
   return {
