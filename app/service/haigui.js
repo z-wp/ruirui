@@ -52,6 +52,7 @@ class HaiguiService extends Service {
     }
     return null;
   }
+
 }
 
 module.exports = HaiguiService;
