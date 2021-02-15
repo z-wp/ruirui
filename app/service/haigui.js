@@ -4,9 +4,9 @@ const Service = require('egg').Service;
 
 class HaiguiService extends Service {
 
+  // 计算康安奇通道和ATR
   async algo(symbol, timeframe = '1d', limit = 20) {
 
-    // 计算康安奇通道和ATR
     const [ ohlcvList, ticker ] = await Promise.all([
       this.ctx.service.apiCcxt.OHLCV(symbol, timeframe, limit),
       this.ctx.service.apiCcxt.platform().fetchTicker(symbol),
@@ -40,6 +40,17 @@ class HaiguiService extends Service {
       don_open: Math.max(...highList),
       don_close: Math.min(...lowList),
     };
+  }
+
+  // 计算买卖单位
+  async unit(symbol, percent = 0.01, timeframe = '1d') {
+    // 当前持有的usdt
+    const usdt = 2000;
+    const algo = await this.algo(symbol, timeframe);
+    if (algo && algo.atr) {
+      return usdt * percent / algo.atr;
+    }
+    return null;
   }
 }
 
