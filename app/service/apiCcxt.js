@@ -36,6 +36,7 @@ class ApiCcxtService extends Service {
   async spot(coin = 'USDT') {
     const balance = await this.platform().fetchBalance({ type: 'spot' });
     return balance && balance[coin] || null;
+    // {"free":42.67567516,"used":0,"total":42.67567516}
   }
 
 }
