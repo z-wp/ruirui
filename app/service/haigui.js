@@ -58,6 +58,21 @@ class HaiguiService extends Service {
     return null;
   }
 
+  async spotStrategy(symbol, percent = 0.01, timeframe = '1d') {
+    const [ balance, algo ] = await Promise.all([
+      this.ctx.service.apiCcxt.spot('USDT'),
+      this.algo(symbol, timeframe),
+    ]);
+    if (balance === null || algo === null) return null;
+    // eslint-disable-next-line dot-notation
+    const usdt = balance['USDT'].free;
+    const unit = usdt * percent / algo.atr;
+
+    // 持空仓
+
+    // 有持仓
+  }
+
 }
 
 module.exports = HaiguiService;
