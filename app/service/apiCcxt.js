@@ -37,6 +37,10 @@ class ApiCcxtService extends Service {
     // ["USDT": {"free":42.67567516,"used":0,"total":42.67567516}]
   }
 
+  async marketBySymbol(platform, symbol) {
+    const markets = await platform.markets();
+  }
+
 }
 
 module.exports = ApiCcxtService;
