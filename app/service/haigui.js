@@ -5,11 +5,11 @@ const Service = require('egg').Service;
 class HaiguiService extends Service {
 
   // 计算康安奇通道和ATR
-  async algo(symbol, timeframe = '1d', limit = 20) {
+  async algo(platform, symbol, timeframe = '1d', limit = 20) {
 
     const [ ohlcvList, ticker ] = await Promise.all([
-      this.ctx.service.apiCcxt.OHLCV(symbol, timeframe, limit),
-      this.ctx.service.apiCcxt.platform().fetchTicker(symbol),
+      this.ctx.service.apiCcxt.OHLCV(platform, symbol, timeframe, limit),
+      platform.fetchTicker(symbol),
     ]);
     const trList = []; const highList = []; const lowList = [];
     let forward;
@@ -43,11 +43,11 @@ class HaiguiService extends Service {
   }
 
   // 计算买卖单位
-  async unit(symbol, percent = 0.01, timeframe = '1d') {
+  async unit(platform, symbol, percent = 0.01, timeframe = '1d') {
     // 当前持有的usdt
     const [ balance, algo ] = await Promise.all([
-      this.ctx.service.apiCcxt.spot('USDT'),
-      this.algo(symbol, timeframe),
+      this.ctx.service.apiCcxt.spot(platform),
+      this.algo(platform, symbol, timeframe),
     ]);
     if (balance === null) return null;
     // eslint-disable-next-line dot-notation
@@ -58,19 +58,42 @@ class HaiguiService extends Service {
     return null;
   }
 
-  async spotStrategy(symbol, percent = 0.01, timeframe = '1d') {
+  async spotStrategy(platform, symbol, percent = 0.01, timeframe = '1d') {
     const [ balance, algo ] = await Promise.all([
-      this.ctx.service.apiCcxt.spot('USDT'),
-      this.algo(symbol, timeframe),
+      this.ctx.service.apiCcxt.spot(platform),
+      this.algo(platform, symbol, timeframe),
     ]);
-    if (balance === null || algo === null) return null;
+    if (!balance) return { success: false, message: 'balance获取失败' };
+    if (!algo) return { success: false, message: 'algo获取失败' };
     // eslint-disable-next-line dot-notation
     const usdt = balance['USDT'].free;
     const unit = usdt * percent / algo.atr;
 
-    // 持空仓
+    // 开仓点
+    const open_point = algo.don_open;
+    // 加仓点(在上一次买入（或加仓）的基础上上涨了0.5atr，则加仓一个Unit)
+    const add_point = algo.don_open + 0.5 * algo.atr;
+    // 止损点(比最后一次买入价格下跌2atr时，则卖出全部头寸止损)
 
-    // 有持仓
+    // 止盈点(价格跌破二分之一n通道下轨，清仓止盈)
+    const clear_point = algo.don_close;
+
+    const coin1 = this.ctx.service.coin.explodeCoinPair(symbol)[0];
+    const coin1Have = balance && balance[coin1] && balance[coin1].free;
+    if (coin1Have > 0) {
+      // 有持仓，突破1/2atr加半单位
+
+    } else {
+      // 没有持仓，加1单位
+    }
+  }
+
+  async addStore(platform, symbol, quantity) {
+
+  }
+
+  async clearStore(platform, symbol) {
+
   }
 
 }

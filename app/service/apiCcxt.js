@@ -5,14 +5,13 @@ const ccxt = require('ccxt');
 
 class ApiCcxtService extends Service {
 
-  platform() {
-    return new ccxt.okex(this.config.okex);
+  platformOkex(config) {
+    return new ccxt.okex(config);
   }
 
-  async OHLCV(symbol, timeframe, limit = 20) {
+  async OHLCV(platform, symbol, timeframe, limit = 20) {
 
-    const okex = this.platform();
-    const list = await okex.fetchOHLCV(symbol, timeframe, undefined, limit);
+    const list = await platform.fetchOHLCV(symbol, timeframe, undefined, limit);
 
     return list.map(item => {
       return {
@@ -27,14 +26,14 @@ class ApiCcxtService extends Service {
 
   }
 
-  async lastClosePrice(symbol, timeframe = '1m') {
-    const data = await this.platform().fetchOHLCV(symbol, timeframe, undefined, 1);
+  async lastClosePrice(platform, symbol, timeframe = '1m') {
+    const data = await platform.fetchOHLCV(symbol, timeframe, undefined, 1);
     return data && data[0][4];
   }
 
   // 获取现货资金量 'account', 'spot', 'margin', 'futures', 'swap'
-  async spot() {
-    return await this.platform().fetchBalance({ type: 'spot' });
+  async spot(platform) {
+    return await platform.fetchBalance({ type: 'spot' });
     // ["USDT": {"free":42.67567516,"used":0,"total":42.67567516}]
   }
 
