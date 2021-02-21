@@ -15,7 +15,7 @@ class HomeController extends Controller {
 
     const okex = new ccxt.okex(this.config.okex);
     // const list = await okex.fetchOHLCV('ETH/USDT', '1d', undefined, 20);
-    const data = (await okex.fetchMarkets()).filter(item => item.type === 'spot' && item.symbol === 'ETH/USDT').push();
+    const data = (await okex.fetchMarkets()).filter(item => item.type === 'spot' && item.symbol === 'ETH/USDT').shift();
     ctx.body = data;
 
     // const show = list.map(item => {
