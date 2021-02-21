@@ -7,16 +7,16 @@ class HomeController extends Controller {
   async index() {
     const { ctx } = this;
 
-    // const platform = this.ctx.service.apiCcxt.platformOkex(this.config.okex);
+    const platform = this.ctx.service.apiCcxt.platformOkex(this.config.okex);
     // ctx.body = await this.ctx.service.haigui.spotStrategy(platform, 'ETH/USDT');
 
     // const data = await ctx.service.record.test();
     // ctx.body = data;
 
-    const okex = new ccxt.okex(this.config.okex);
+    // const okex = new ccxt.okex(this.config.okex);
     // const list = await okex.fetchOHLCV('ETH/USDT', '1d', undefined, 20);
-    const data = okex.fetchTrades('ETH-USDT');
-    ctx.body = data;
+    // const data = okex.fetchTrades('ETH-USDT');
+    // ctx.body = data;
 
     // const show = list.map(item => {
     //   return {
@@ -38,7 +38,7 @@ class HomeController extends Controller {
     //   data,
     //   close: data[0][4],
     // };
-    // ctx.body = await this.ctx.service.apiCcxt.lastClosePrice('ETH/USDT');
+    ctx.body = await this.ctx.service.apiCcxt.lastClosePrice(platform, 'ETH/USDT');
     // ctx.body = await this.ctx.service.haigui.unit('ETH/USDT');
     // ctx.body = await okex.fetchBalance({ type: 'spot' });
     // ctx.body = await this.ctx.service.haigui.unit('ETH/USDT');
