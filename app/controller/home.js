@@ -17,7 +17,7 @@ class HomeController extends Controller {
     // ctx.body = data;
 
     const okex = new ccxt.okex(this.config.okex);
-    const data = await okex.fetchMyTrades('ETH/USDT', undefined, 2);
+    const data = await okex.fetchMyTrades('ETH/USDT', undefined, 1);
     // const list = await okex.fetchOHLCV('ETH/USDT', '1d', undefined, 20);
     // const data = (await okex.fetchMarkets()).filter(item => item.type === 'spot' && item.symbol === 'ETH/USDT').shift();
     ctx.body = data;

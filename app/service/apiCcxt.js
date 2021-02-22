@@ -45,6 +45,27 @@ class ApiCcxtService extends Service {
     // "limits":{"amount":{"min":0.001},"price":{"min":0.01},"cost":{"min":0.01}}}
   }
 
+  async getLastBuyCoin1Price(platform, symbol) {
+    const list = await platform.fetchMyTrades(symbol, undefined, 1) || [];
+    const item = list.shift();
+    return item && item.side === 'buy' && item.price || null;
+    // [{
+    // "timestamp":1613375901000,
+    // "datetime":"2021-02-15T07:58:21.000Z",
+    // "symbol":"ETH/USDT",
+    // "id":"74559385",
+    // "order":"6464464517024768",
+    // "takerOrMaker":"taker",
+    // "side":"sell",
+    // "price":1750.91,
+    // "amount":0.024207,
+    // "cost":42.38427837,
+    // "fee":{
+    //     "cost":0.04238428,
+    //     "currency":"USDT"
+    // }]
+  }
+
 }
 
 module.exports = ApiCcxtService;
