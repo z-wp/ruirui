@@ -14,6 +14,25 @@ class RecordService extends Service {
     });
     return data;
   }
+
+  async findUserConfigs() {
+    return await this.app.mysql.select('account', {});
+    // [
+    //   {
+    //       "id": 1,
+    //       "apiKey": "54b27c1a-05ed-4936-b4b5-f92b9f82f40f",
+    //       "secret": "EB7459716CCE1B19C8FAFABC419A1CEA",
+    //       "passphrase": "Xiaowei719899730",
+    //       "status": 1
+    //   }
+    // ]
+  }
+
+  async findCoinConfigs(appKey) {
+    return await this.app.mysql.select('coin_config', {
+      where: { appKey },
+    });
+  }
 }
 
 module.exports = RecordService;

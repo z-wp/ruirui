@@ -58,10 +58,11 @@ class HaiguiService extends Service {
     return null;
   }
 
-  async spotStrategy(platform, symbol, percent = 0.01, timeframe = '1d') {
-    const [ balance, algo ] = await Promise.all([
+  async spotStrategy(conConfig, platform, symbol, percent = 0.01, timeframe = '1d') {
+    const [ balance, algo, symbolLimit ] = await Promise.all([
       this.ctx.service.apiCcxt.spot(platform),
       this.algo(platform, symbol, timeframe),
+      this.ctx.service.apiCcxt.marketLimitBySymbol(platform, symbol), // {"amount":{"min":0.001},"price":{"min":0.01},"cost":{"min":0.01}}
     ]);
     if (!balance) return { success: false, message: 'balance获取失败' };
     if (!algo) return { success: false, message: 'algo获取失败' };
@@ -94,6 +95,57 @@ class HaiguiService extends Service {
 
   async clearStore(platform, symbol) {
 
+  }
+
+  async main() {
+    try {
+      const accountList = await this.ctx.service.record.findUserConfigs();
+      if (accountList) {
+        for (const account of accountList) {
+          if (account.status === 1) {
+            const runCoins = await this.ctx.service.record.findCoinConfigs(account.apiKey);
+            if (runCoins) {
+
+              let platform;
+              if (account.platform === 'okex') {
+                platform = this.ctx.service.apiCcxt.platformOkex({
+                  apiKey: account.apiKey,
+                  secret: account.secret,
+                  password: account.passphrase || undefined,
+                });
+              }
+              if (!platform) {
+                this.ctx.logger.info(`配置的平台${account.platform}暂不支持`);
+                continue;
+              }
+
+              for (const coin of runCoins) {
+                if (coin.status === 1) {
+                  // 运行
+                  // {
+                  //   id: 2,
+                  //   appKey: '54b27c1a-05ed-4936-b4b5-f92b9f82f40f',
+                  //   coinPair: 'BTC/USDT',
+                  //   coin2JoinQuantity: 100,
+                  //   status: 1,
+                  //   coin1JoinQuantity: 0.005,
+                  // }
+                  const res = await this.ctx.service.haigui.spotStrategy(coin, platform, coin.coinPair);
+                  if (res && !res.success) {
+                    this.ctx.logger.error(res.message);
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+
+      return { success: true, message: '' };
+    } catch (error) {
+      this.ctx.logger.error(error.message);
+      return { success: false, message: error.message };
+    }
   }
 
 }

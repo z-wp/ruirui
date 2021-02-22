@@ -8,7 +8,7 @@ module.exports = {
   // }
 
   mysql: {
-    enable: false,
+    enable: true,
     package: 'egg-mysql',
   },
 };
