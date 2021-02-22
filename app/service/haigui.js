@@ -66,9 +66,22 @@ class HaiguiService extends Service {
     ]);
     if (!balance) return { success: false, message: 'balance获取失败' };
     if (!algo) return { success: false, message: 'algo获取失败' };
-    // eslint-disable-next-line dot-notation
-    const usdt = balance['USDT'].free;
-    const unit = usdt * percent / algo.atr;
+    if (!symbolLimit) return { success: false, message: 'symbol的market limit获取失败' };
+
+    const coin1HoldLimit = conConfig && conConfig.coin1JoinQuantity || 0;
+    const coin2StartLimit = conConfig && conConfig.coin2JoinQuantity || 0;
+    const explode = this.ctx.service.coin.explodeCoinPair(symbol);
+    const coin1 = explode[0];
+    const coin2 = explode[1];
+    const coin1Have = balance[coin1] && balance[coin1].free;
+    const coin2Have = balance[coin2] && balance[coin2].free;
+    if (coin2Have === undefined) return { success: false, message: 'coin2持有量不存在' };
+    if (coin2Have < coin2StartLimit) return { success: false, message: 'coin2持有量不足脚本启动条件' };
+
+    const unit = coin2Have * percent / algo.atr;
+    if (unit < symbolLimit.amount.min) return { success: false, message: '计算所得开仓单位小于平台最小下单量' };
+
+    const isHoldPosition = coin1Have >= coin1HoldLimit;
 
     // 开仓点
     const open_point = algo.don_open;
@@ -79,8 +92,6 @@ class HaiguiService extends Service {
     // 止盈点(价格跌破二分之一n通道下轨，清仓止盈)
     const clear_point = algo.don_close;
 
-    const coin1 = this.ctx.service.coin.explodeCoinPair(symbol)[0];
-    const coin1Have = balance && balance[coin1] && balance[coin1].free;
     if (coin1Have > 0) {
       // 有持仓，突破1/2atr加半单位
 

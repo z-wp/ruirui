@@ -12,13 +12,15 @@ class HomeController extends Controller {
 
     // const data = await ctx.service.record.findCoinConfigs('54b27c1a-05ed-4936-b4b5-f92b9f82f40f');
     // const data = await ctx.service.record.findUserConfigs();
-    const data = await ctx.service.haigui.main();
-    ctx.body = data;
+  
+    // const data = await ctx.service.haigui.main();
+    // ctx.body = data;
 
-    // const okex = new ccxt.okex(this.config.okex);
+    const okex = new ccxt.okex(this.config.okex);
+    const data = await okex.fetchMyTrades('ETH/USDT', undefined, 2);
     // const list = await okex.fetchOHLCV('ETH/USDT', '1d', undefined, 20);
     // const data = (await okex.fetchMarkets()).filter(item => item.type === 'spot' && item.symbol === 'ETH/USDT').shift();
-    // ctx.body = data;
+    ctx.body = data;
 
     // const show = list.map(item => {
     //   return {
