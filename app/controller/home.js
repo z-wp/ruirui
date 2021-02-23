@@ -13,7 +13,7 @@ class HomeController extends Controller {
 
     // const data = await ctx.service.record.findCoinConfigs('54b27c1a-05ed-4936-b4b5-f92b9f82f40f');
     // const data = await ctx.service.record.findUserConfigs();
-  
+
     // const data = await ctx.service.haigui.main();
     // ctx.body = data;
 
