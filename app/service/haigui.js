@@ -59,14 +59,16 @@ class HaiguiService extends Service {
   }
 
   async spotStrategy(conConfig, platform, symbol, percent = 0.01, timeframe = '1d') {
-    const [ balance, algo, symbolLimit ] = await Promise.all([
+    const [ balance, algo, symbolLimit, lastClosePrice ] = await Promise.all([
       this.ctx.service.apiCcxt.spot(platform),
       this.algo(platform, symbol, timeframe),
       this.ctx.service.apiCcxt.marketLimitBySymbol(platform, symbol), // {"amount":{"min":0.001},"price":{"min":0.01},"cost":{"min":0.01}}
+      this.ctx.service.apiCcxt.lastClosePrice(platform, symbol),
     ]);
     if (!balance) return { success: false, message: 'balance获取失败' };
     if (!algo) return { success: false, message: 'algo获取失败' };
     if (!symbolLimit) return { success: false, message: 'symbol的market limit获取失败' };
+    if (!lastClosePrice) return { success: false, message: 'lastClosePrice获取失败' };
 
     const coin1HoldLimit = conConfig && conConfig.coin1JoinQuantity || 0;
     const coin2StartLimit = conConfig && conConfig.coin2JoinQuantity || 0;
@@ -86,17 +88,28 @@ class HaiguiService extends Service {
     // 开仓点
     const open_point = algo.don_open;
     // 加仓点(在上一次买入（或加仓）的基础上上涨了0.5atr，则加仓一个Unit)
-    const add_point = algo.don_open + 0.5 * algo.atr;
     // 止损点(比最后一次买入价格下跌2atr时，则卖出全部头寸止损)
-
     // 止盈点(价格跌破二分之一n通道下轨，清仓止盈)
-    const clear_point = algo.don_close;
 
-    if (coin1Have > 0) {
-      // 有持仓，突破1/2atr加半单位
+    if (isHoldPosition) {
+      // 止盈点
+      const winAlgo = await this.algo(platform, symbol, this.ctx.service.coin.timeframeD2(timeframe));
+      if (!winAlgo) return { success: false, message: '止盈点algo获取失败' };
+      const winPoint = winAlgo.don_close;
+      if (lastClosePrice < winAlgo) {
+        // 清仓止盈
+      }
 
+      // 有持仓，突破1/2atr加1单位
+      const lastPrice = await this.ctx.service.apiCcxt.getLastBuyCoin1Price(platform, symbol);
+      if (!lastPrice) return { success: false, message: '无法获取加仓价格,最近一条记录不是加仓记录' };
+      const add_point = lastPrice + 0.5 * algo.atr;
+  
     } else {
-      // 没有持仓，加1单位
+      // 没有持仓，开1单位
+      if (lastClosePrice > open_point) {
+        // const res = await this.ctx.service.
+      }
     }
   }
 

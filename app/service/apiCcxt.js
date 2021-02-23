@@ -45,11 +45,10 @@ class ApiCcxtService extends Service {
     // "limits":{"amount":{"min":0.001},"price":{"min":0.01},"cost":{"min":0.01}}}
   }
 
-  async getLastBuyCoin1Price(platform, symbol, limit = 10) {
-    const list = await platform.fetchOrdersByState(2, symbol, undefined, limit) || [];
+  async getLastBuyCoin1Price(platform, symbol) {
+    const list = await platform.fetchOrdersByState(2, symbol, undefined, 2) || [];
     const item = list && list[0];
-    return item.average;
-    // return item && item.side === 'buy' && item.average || null;
+    return item && item.side === 'buy' && item.average || null;
     // [{
     // "timestamp":1613375901000,
     // "datetime":"2021-02-15T07:58:21.000Z",
