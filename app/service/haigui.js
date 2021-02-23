@@ -108,13 +108,20 @@ class HaiguiService extends Service {
     } else {
       // 没有持仓，开1单位
       if (lastClosePrice > open_point) {
-        // const res = await this.ctx.service.
+        const res = await this.addStore(platform, symbol, unit, lastClosePrice);
+        if (!res || !res.info.result) {
+          return { success: false, message: `addStore ${res.info.error_message}` };
+        }
+        return { success: true, message: '成功开仓1单位' };
       }
     }
+    return { success: true, message: '' };
   }
 
-  async addStore(platform, symbol, quantity) {
-
+  async addStore(platform, symbol, quantity, price) {
+    return await platform.createOrder(symbol, 'market', 'buy', quantity, price);
+    // {"info":{"client_oid":"","code":"0","error_code":"0","error_message":"","message":"","order_id":"6511131220335617","result":true},
+    // "id":"6511131220335617","symbol":"ETH/USDT","type":"market","side":"buy"}
   }
 
   async clearStore(platform, symbol) {

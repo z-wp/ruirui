@@ -21,7 +21,8 @@ class HomeController extends Controller {
     // const data = await okex.fetchOrdersByState(2, 'ETH/USDT', undefined, 10); // type是limit还是market
     // const list = await okex.fetchOHLCV('ETH/USDT', '1d', undefined, 20);
     // const data = (await okex.fetchMarkets()).filter(item => item.type === 'spot' && item.symbol === 'ETH/USDT').shift();
-    const data = await okex.createOrder('ETH/USDT', 'market', 'buy', 0.002, 1518.01);
+    // const data = await okex.createOrder('ETH/USDT', 'market', 'buy', 0.002, 1518.01);
+    const data = await okex.createOrder('ETH/USDT', 'market', 'sell', 0.0019);
     ctx.body = data;
 
     // const show = list.map(item => {
