@@ -92,25 +92,48 @@ class HaiguiService extends Service {
     // 止盈点(价格跌破二分之一n通道下轨，清仓止盈)
 
     if (isHoldPosition) {
-      // 止盈点
+      // 止盈
       const winAlgo = await this.algo(platform, symbol, this.ctx.service.coin.timeframeD2(timeframe));
       if (!winAlgo) return { success: false, message: '止盈点algo获取失败' };
       const winPoint = winAlgo.don_close;
-      if (lastClosePrice < winAlgo) {
+      if (lastClosePrice < winPoint) {
         // 清仓止盈
+        const res = await this.clearStore(platform, symbol, coin1Have);
+        if (!res || !res.info.result) {
+          return { success: false, message: `stop win error ${res.info.error_message}` };
+        }
+        return { success: true, message: '成功止盈' };
+      }
+
+      const lastBuyPrice = await this.ctx.service.apiCcxt.getLastBuyCoin1Price(platform, symbol);
+      if (!lastBuyPrice) return { success: false, message: '持仓了, 但最近一条记录不是市价加仓记录' };
+
+      // 止损
+      const stopLossPoint = lastBuyPrice - 2 * algo.atr;
+      if (lastClosePrice < stopLossPoint) {
+        // 清仓止损
+        const res = await this.clearStore(platform, symbol, coin1Have);
+        if (!res || !res.info.result) {
+          return { success: false, message: `stop loss error ${res.info.error_message}` };
+        }
+        return { success: true, message: '成功止损' };
       }
 
       // 有持仓，突破1/2atr加1单位
-      const lastPrice = await this.ctx.service.apiCcxt.getLastBuyCoin1Price(platform, symbol);
-      if (!lastPrice) return { success: false, message: '无法获取加仓价格,最近一条记录不是加仓记录' };
-      const add_point = lastPrice + 0.5 * algo.atr;
-  
+      const addPoint = lastBuyPrice + 0.5 * algo.atr;
+      if (lastClosePrice > addPoint) {
+        const res = await this.addStore(platform, symbol, unit, lastClosePrice);
+        if (!res || !res.info.result) {
+          return { success: false, message: `addStore again error ${res.info.error_message}` };
+        }
+        return { success: true, message: '成功加仓1单位' };
+      }
     } else {
       // 没有持仓，开1单位
       if (lastClosePrice > open_point) {
         const res = await this.addStore(platform, symbol, unit, lastClosePrice);
         if (!res || !res.info.result) {
-          return { success: false, message: `addStore ${res.info.error_message}` };
+          return { success: false, message: `addStore error ${res.info.error_message}` };
         }
         return { success: true, message: '成功开仓1单位' };
       }
@@ -124,8 +147,10 @@ class HaiguiService extends Service {
     // "id":"6511131220335617","symbol":"ETH/USDT","type":"market","side":"buy"}
   }
 
-  async clearStore(platform, symbol) {
-
+  async clearStore(platform, symbol, quantity) {
+    return await platform.createOrder(symbol, 'market', 'sell', quantity);
+    // {"info":{"client_oid":"","code":"0","error_code":"0","error_message":"","message":"","order_id":"6511182790223873","result":true},
+    // "id":"6511182790223873","symbol":"ETH/USDT","type":"market","side":"sell"}
   }
 
   async main() {

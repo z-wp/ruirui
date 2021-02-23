@@ -7,7 +7,8 @@ class HomeController extends Controller {
   async index() {
     const { ctx } = this;
 
-    // const platform = this.ctx.service.apiCcxt.platformOkex(this.config.okex);
+    const platform = this.ctx.service.apiCcxt.platformOkex(this.config.okex);
+    ctx.body = await this.ctx.service.haigui.algo(platform, 'ETH/USDT');
     // ctx.body = await this.ctx.service.apiCcxt.getLastBuyCoin1Price(platform, 'ETH/USDT');
     // ctx.body = await this.ctx.service.haigui.spotStrategy(platform, 'ETH/USDT');
 
@@ -17,13 +18,13 @@ class HomeController extends Controller {
     // const data = await ctx.service.haigui.main();
     // ctx.body = data;
 
-    const okex = new ccxt.okex(this.config.okex);
+    // const okex = new ccxt.okex(this.config.okex);
     // const data = await okex.fetchOrdersByState(2, 'ETH/USDT', undefined, 10); // type是limit还是market
     // const list = await okex.fetchOHLCV('ETH/USDT', '1d', undefined, 20);
     // const data = (await okex.fetchMarkets()).filter(item => item.type === 'spot' && item.symbol === 'ETH/USDT').shift();
     // const data = await okex.createOrder('ETH/USDT', 'market', 'buy', 0.002, 1518.01);
-    const data = await okex.createOrder('ETH/USDT', 'market', 'sell', 0.0019);
-    ctx.body = data;
+    // const data = await okex.createOrder('ETH/USDT', 'market', 'sell', 0.0019);
+    // ctx.body = data;
 
     // const show = list.map(item => {
     //   return {
