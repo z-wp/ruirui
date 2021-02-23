@@ -8,7 +8,7 @@ class HomeController extends Controller {
     const { ctx } = this;
 
     const platform = this.ctx.service.apiCcxt.platformOkex(this.config.okex);
-    ctx.body = await this.ctx.service.haigui.algo(platform, 'ETH/USDT');
+    ctx.body = await this.ctx.service.haigui.algo(platform, 'ETH/USDT') || 'not data';
     // ctx.body = await this.ctx.service.apiCcxt.getLastBuyCoin1Price(platform, 'ETH/USDT');
     // ctx.body = await this.ctx.service.haigui.spotStrategy(platform, 'ETH/USDT');
 
