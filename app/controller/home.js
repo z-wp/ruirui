@@ -17,9 +17,9 @@ class HomeController extends Controller {
     // ctx.body = data;
 
     const okex = new ccxt.okex(this.config.okex);
-    // const data = await okex.fetchOrdersByState(2, 'ETH/USDT', undefined, 10, { type: 'limit' }); // type是limit还是market
+    const data = await okex.fetchOrdersByState(2, 'ETH/USDT', undefined, 10, { type: 'limit' }); // type是limit还是market
     // const list = await okex.fetchOHLCV('ETH/USDT', '1d', undefined, 20);
-    const data = (await okex.fetchMarkets()).filter(item => item.type === 'spot' && item.symbol === 'ETH/USDT').shift();
+    // const data = (await okex.fetchMarkets()).filter(item => item.type === 'spot' && item.symbol === 'ETH/USDT').shift();
     ctx.body = data;
 
     // const show = list.map(item => {
