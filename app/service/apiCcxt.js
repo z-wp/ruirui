@@ -45,8 +45,8 @@ class ApiCcxtService extends Service {
     // "limits":{"amount":{"min":0.001},"price":{"min":0.01},"cost":{"min":0.01}}}
   }
 
-  async getLastBuyCoin1Price(platform, symbol) {
-    const list = await platform.fetchMyTrades(symbol, undefined, 1) || [];
+  async getLastBuyCoin1Price(platform, symbol, limit = 10) {
+    const list = await platform.fetchOrdersByState(2, symbol, undefined, limit) || [];
     const item = list.shift();
     return item && item.side === 'buy' && item.price || null;
     // [{

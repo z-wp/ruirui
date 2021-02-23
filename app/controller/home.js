@@ -7,7 +7,8 @@ class HomeController extends Controller {
   async index() {
     const { ctx } = this;
 
-    // const platform = this.ctx.service.apiCcxt.platformOkex(this.config.okex);
+    const platform = this.ctx.service.apiCcxt.platformOkex(this.config.okex);
+    ctx.body = await this.ctx.service.apiCcxt.getLastBuyCoin1Price(platform, 'ETH/USDT');
     // ctx.body = await this.ctx.service.haigui.spotStrategy(platform, 'ETH/USDT');
 
     // const data = await ctx.service.record.findCoinConfigs('54b27c1a-05ed-4936-b4b5-f92b9f82f40f');
@@ -16,11 +17,11 @@ class HomeController extends Controller {
     // const data = await ctx.service.haigui.main();
     // ctx.body = data;
 
-    const okex = new ccxt.okex(this.config.okex);
-    const data = await okex.fetchOrdersByState(2, 'ETH/USDT', undefined, 10); // type是limit还是market
+    // const okex = new ccxt.okex(this.config.okex);
+    // const data = await okex.fetchOrdersByState(2, 'ETH/USDT', undefined, 10); // type是limit还是market
     // const list = await okex.fetchOHLCV('ETH/USDT', '1d', undefined, 20);
     // const data = (await okex.fetchMarkets()).filter(item => item.type === 'spot' && item.symbol === 'ETH/USDT').shift();
-    ctx.body = data;
+    // ctx.body = data;
 
     // const show = list.map(item => {
     //   return {
