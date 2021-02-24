@@ -15,7 +15,7 @@ module.exports = appInfo => {
   config.cluster = {
     listen: {
       path: '',
-      port: 80,
+      port: 7001,
       hostname: '0.0.0.0',
     },
   };
@@ -29,6 +29,17 @@ module.exports = appInfo => {
   // add your user config here
   const userConfig = {
     // myAppName: 'egg',
+    security: {
+      csrf: {
+        enable: false,
+        ignoreJSON: true,
+      },
+      domainWhiteList: [ 'http://localhost:8080' ],
+    },
+    cors: {
+      origin: '*',
+      allowMethods: 'GET,HEAD,PUT,POST,DELETE,PATCH',
+    },
   };
 
   config.okex = {
