@@ -16,7 +16,7 @@ module.exports = {
     while ((new Date()).getTime() - start < delay) {
       continue;
     }
-    const res = true;
+    const res = { success: true, message: '' };
     // test-end
 
     if (res) {
