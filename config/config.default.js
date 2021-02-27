@@ -34,7 +34,6 @@ module.exports = appInfo => {
         enable: false,
         ignoreJSON: true,
       },
-      domainWhiteList: [ 'http://localhost:8080', 'http://localhost:80' ],
     },
     cors: {
       origin: '*',
