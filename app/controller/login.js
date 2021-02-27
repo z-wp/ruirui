@@ -9,7 +9,11 @@ class LoginController extends Controller {
     const username = ctx.request.body.username;
     const password = ctx.request.body.password;
     const data = { token: escape(username + password) };
-    ctx.body = { success: true, data };
+    if (username === 'admin' && password === '2021@ruirui') {
+      ctx.body = { success: true, data };
+    } else {
+      ctx.body = { success: false };
+    }
   }
 }
 
