@@ -26,17 +26,6 @@ module.exports = appInfo => {
   // add your middleware config here
   config.middleware = [];
 
-  config.security = {
-    csrf: {
-      enable: false,
-    },
-    domainWhiteList: [ '*' ],
-  };
-  config.cors = {
-    origin: '*',
-    allowMethods: 'GET,HEAD,PUT,POST,DELETE,PATCH,OPTIONS',
-  };
-
   // add your user config here
   const userConfig = {
     // myAppName: 'egg',
@@ -44,7 +33,7 @@ module.exports = appInfo => {
       csrf: {
         enable: false,
       },
-      domainWhiteList: [ '*' ],
+      domainWhiteList: [ 'manga.wang', '*' ],
     },
     cors: {
       origin: '*',
