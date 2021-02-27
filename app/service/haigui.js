@@ -59,6 +59,9 @@ class HaiguiService extends Service {
   }
 
   async spotStrategy(conConfig, platform, symbol, percent = 0.01, timeframe = '1d') {
+    if (conConfig && conConfig.timeframe) {
+      timeframe = conConfig.timeframe;
+    }
     const [ balance, algo, symbolLimit, lastClosePrice ] = await Promise.all([
       this.ctx.service.apiCcxt.spot(platform),
       this.algo(platform, symbol, timeframe),
@@ -154,45 +157,40 @@ class HaiguiService extends Service {
   }
 
   async main() {
+    // return { success: false, message: '测试' };
     try {
       const accountList = await this.ctx.service.record.findUserConfigs();
       if (accountList) {
         for (const account of accountList) {
-          if (account.status === 1) {
-            const runCoins = await this.ctx.service.record.findCoinConfigs(account.apiKey);
-            if (runCoins) {
+          if (account && account.state === 1) {
 
-              let platform;
-              if (account.platform === 'okex') {
-                platform = this.ctx.service.apiCcxt.platformOkex({
-                  apiKey: account.apiKey,
-                  secret: account.secret,
-                  password: account.passphrase || undefined,
-                });
-              }
-              if (!platform) {
-                this.ctx.logger.info(`配置的平台${account.platform}暂不支持`);
-                continue;
-              }
-
-              for (const coin of runCoins) {
-                if (coin.status === 1) {
-                  // 运行
-                  // {
-                  //   id: 2,
-                  //   appKey: '54b27c1a-05ed-4936-b4b5-f92b9f82f40f',
-                  //   coinPair: 'BTC/USDT',
-                  //   coin2JoinQuantity: 100,
-                  //   status: 1,
-                  //   coin1JoinQuantity: 0.005,
-                  // }
-                  const res = await this.ctx.service.haigui.spotStrategy(coin, platform, coin.coinPair);
-                  if (res && !res.success) {
-                    this.ctx.logger.error(res.message);
-                  }
-                }
-              }
+            let platform;
+            if (account.platform === 'okex') {
+              platform = this.ctx.service.apiCcxt.platformOkex({
+                apiKey: account.apiKey,
+                secret: account.secret,
+                password: account.passphrase || undefined,
+              });
             }
+            if (!platform) {
+              this.ctx.logger.info(`配置的平台${account.platform}暂不支持`);
+              continue;
+            }
+
+            // 运行
+            // {
+            //   id: 2,
+            //   appKey: '54b27c1a-05ed-4936-b4b5-f92b9f82f40f',
+            //   coinPair: 'BTC/USDT',
+            //   coin2JoinQuantity: 100,
+            //   status: 1,
+            //   coin1JoinQuantity: 0.005,
+            // }
+            const res = await this.ctx.service.haigui.spotStrategy(account, platform, account.coinPair);
+            if (res && !res.success) {
+              return { success: false, message: res.message };
+            }
+
           }
         }
       }
