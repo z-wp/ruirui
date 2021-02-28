@@ -279,28 +279,25 @@ class HaiguiService extends Service {
     const accountList = await this.ctx.service.record.findUserConfigs();
     if (accountList) {
       for (const account of accountList) {
-        if (account && account.state === 1) {
+        let platform;
+        if (account.platform === 'okex') {
+          platform = this.ctx.service.apiCcxt.platformOkex({
+            apiKey: account.apiKey,
+            secret: account.secret,
+            password: account.passphrase || undefined,
+          });
+        }
+        if (!platform) {
+          list.push({
+            success: false,
+            message: `配置的平台${account.platform}暂不支持`,
+          });
+          continue;
+        }
 
-          let platform;
-          if (account.platform === 'okex') {
-            platform = this.ctx.service.apiCcxt.platformOkex({
-              apiKey: account.apiKey,
-              secret: account.secret,
-              password: account.passphrase || undefined,
-            });
-          }
-          if (!platform) {
-            list.push({
-              success: false,
-              message: `配置的平台${account.platform}暂不支持`,
-            });
-            continue;
-          }
-
-          const res = await this.ctx.service.haigui.strategyAnalysis(account, platform, account.coinPair);
-          if (res) {
-            list.push(res);
-          }
+        const res = await this.ctx.service.haigui.strategyAnalysis(account, platform, account.coinPair);
+        if (res) {
+          list.push(res);
         }
       }
     }
