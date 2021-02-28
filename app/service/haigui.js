@@ -255,7 +255,7 @@ class HaiguiService extends Service {
       addPoint = lastBuyPrice + 0.5 * algo.atr;
     }
 
-    return {
+    const data = {
       success: true,
       balance,
       algo,
@@ -267,7 +267,7 @@ class HaiguiService extends Service {
       addPoint,
       conConfig,
     };
-
+    return { success: true, data };
   }
 
   async allAccountAnalysis() {
