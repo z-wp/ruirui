@@ -39,7 +39,8 @@ class ApiCcxtService extends Service {
 
   async marketLimitBySymbol(platform, symbol, type = 'spot') {
     const data = (await platform.fetchMarkets()).filter(item => item.type === type && item.symbol === symbol).shift();
-    return data && data.limit || null;
+    return data;
+    // return data && data.limit || null;
     // {"taker":0.0015,"maker":0.001,"id":"ETH-USDT","symbol":"ETH/USDT","base":"ETH","quote":"USDT","baseId":"ETH","quoteId":"USDT",
     //   "info":{"base_currency":"ETH","category":"1","instrument_id":"ETH-USDT","min_size":"0.001","quote_currency":"USDT","size_increment":"0.000001","tick_size":"0.01"},"type":"spot","spot":true,"futures":false,"swap":false,"option":false,"active":true,"precision":{"amount":0.000001,"price":0.01},
     // "limits":{"amount":{"min":0.001},"price":{"min":0.01},"cost":{"min":0.01}}}
