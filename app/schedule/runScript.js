@@ -8,15 +8,15 @@ module.exports = {
   async task(ctx) {
 
     const startTime = (new Date()).getTime();
-    // const res = await ctx.service.haigui.main();
+    const res = await ctx.service.haigui.main();
 
     // test-start
-    const start = (new Date()).getTime();
-    const delay = 1000;
-    while ((new Date()).getTime() - start < delay) {
-      continue;
-    }
-    const res = { success: true, message: '' };
+    // const start = (new Date()).getTime();
+    // const delay = 1000;
+    // while ((new Date()).getTime() - start < delay) {
+    //   continue;
+    // }
+    // const res = { success: true, message: '' };
     // test-end
 
     if (res) {

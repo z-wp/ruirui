@@ -124,7 +124,8 @@ class HaiguiService extends Service {
 
       // 有持仓，突破1/2atr加1单位
       const addPoint = lastBuyPrice + 0.5 * algo.atr;
-      if (lastClosePrice > addPoint) {
+      const addEnd = open_point + 2 * algo.atr;
+      if (lastClosePrice > addPoint && lastClosePrice < addEnd) {
         const res = await this.addStore(platform, symbol, unit, lastClosePrice);
         if (!res || !res.info.result) {
           return { success: false, message: `addStore again error ${res.info.error_message}` };
@@ -242,6 +243,7 @@ class HaiguiService extends Service {
     let winPoint;
     let stopLossPoint;
     let addPoint;
+    const addEnd = open_point + 2 * algo.atr;
     if (isHoldPosition) {
       // 止盈
       const winAlgo = await this.algo(platform, symbol, this.ctx.service.coin.timeframeD2(timeframe));
@@ -263,6 +265,7 @@ class HaiguiService extends Service {
       isHoldPosition,
       lastClosePrice,
       unit,
+      addEnd,
       winPoint,
       stopLossPoint,
       addPoint,
