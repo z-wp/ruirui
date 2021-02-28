@@ -212,10 +212,6 @@ class HaiguiService extends Service {
       this.ctx.service.apiCcxt.marketLimitBySymbol(platform, symbol), // {"amount":{"min":0.001},"price":{"min":0.01},"cost":{"min":0.01}}
       this.ctx.service.apiCcxt.lastClosePrice(platform, symbol),
     ]);
-
-    return { success: false, message: symbolLimit };
-
-
     if (!balance) return { success: false, message: 'balance获取失败' };
     if (!algo) return { success: false, message: 'algo获取失败' };
     if (!symbolLimit) return { success: false, message: `${symbol}的market limit获取失败` };
