@@ -262,6 +262,7 @@ class HaiguiService extends Service {
       open_point,
       isHoldPosition,
       lastClosePrice,
+      unit,
       winPoint,
       stopLossPoint,
       addPoint,
