@@ -81,7 +81,6 @@ class HaiguiService extends Service {
     const coin1Have = balance[coin1] && balance[coin1].free;
     const coin2Have = balance[coin2] && balance[coin2].free;
     if (coin2Have === undefined) return { success: false, message: '本金币持有量不存在' };
-    if (coin2Have < coin2StartLimit) return { success: false, message: '本金币持有量不足脚本启动条件' };
 
     const per = 1 / symbolLimit.amount.min;
     const unit = Math.ceil(coin2Have * percent / algo.atr * per) / per;
@@ -134,6 +133,7 @@ class HaiguiService extends Service {
         return { success: true, message: '成功加仓1单位' };
       }
     } else {
+      if (coin2Have < coin2StartLimit) return { success: false, message: '本金币持有量不足脚本预设开仓条件' };
       // 没有持仓，开1单位
       if (lastClosePrice > open_point) {
         const res = await this.addStore(platform, symbol, unit, lastClosePrice);
