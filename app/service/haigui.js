@@ -269,6 +269,7 @@ class HaiguiService extends Service {
       stopLossPoint,
       addPoint,
       conConfig,
+      symbolLimit,
     };
   }
 
