@@ -5,7 +5,7 @@
  */
 module.exports = app => {
   const { router, controller } = app;
-  // router.get('/', controller.home.index);
+  router.get('/', controller.home.index);
   router.post('/api/login', controller.login.login);
   router.get('/api/accounts', controller.account.accounts);
   router.post('/api/account/changeState', controller.account.changeState);
@@ -13,5 +13,5 @@ module.exports = app => {
   router.post('/api/account/query', controller.account.query);
   router.post('/api/account/edit', controller.account.edit);
   router.get('/api/script/status', controller.script.status);
-  router.get('/', controller.data.strategy);
+  router.get('/api/data/strategy', controller.data.strategy);
 };

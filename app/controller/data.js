@@ -5,7 +5,9 @@ const Controller = require('egg').Controller;
 class DataController extends Controller {
 
   async strategy() {
-    return await this.ctx.service.haigui.allAccountAnalysis();
+    const { ctx } = this;
+    const res = await this.ctx.service.haigui.allAccountAnalysis();
+    ctx.body = res;
   }
 }
 
