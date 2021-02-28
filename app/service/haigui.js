@@ -225,7 +225,6 @@ class HaiguiService extends Service {
     const coin1Have = balance[coin1] && balance[coin1].free;
     const coin2Have = balance[coin2] && balance[coin2].free;
 
-    return { success: false, message: { balance, explode } };
     if (coin2Have === undefined) return { success: false, message: '本金币持有量不存在' };
     if (coin2Have < coin2StartLimit) return { success: false, message: '本金币持有量不足脚本启动条件' };
 
@@ -258,6 +257,7 @@ class HaiguiService extends Service {
 
     return {
       success: true,
+      balance,
       algo,
       open_point,
       isHoldPosition,
@@ -265,6 +265,7 @@ class HaiguiService extends Service {
       winPoint,
       stopLossPoint,
       addPoint,
+      conConfig,
     };
 
   }

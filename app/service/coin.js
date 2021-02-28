@@ -4,7 +4,7 @@ const Service = require('egg').Service;
 
 class CoinService extends Service {
 
-  async explodeCoinPair(pair) {
+  explodeCoinPair(pair) {
     return pair.split('/');
   }
 
