@@ -174,8 +174,7 @@ class HaiguiService extends Service {
               });
             }
             if (!platform) {
-              this.ctx.logger.info(`配置的平台${account.platform}暂不支持`);
-              continue;
+              return { success: false, message: `配置的平台${account.platform}暂不支持` };
             }
 
             // 运行
