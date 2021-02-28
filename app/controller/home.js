@@ -7,7 +7,8 @@ class HomeController extends Controller {
   async index() {
     const { ctx } = this;
 
-    const data = this.ctx.service.coin.explodeCoinPair('ETH/USDT');
+    // const data = this.ctx.service.coin.explodeCoinPair('ETH/USDT');
+    const data = await this.ctx.service.haigui.main();
     ctx.body = data;
     // const platform = this.ctx.service.apiCcxt.platformOkex(this.config.okex);
     // ctx.body = await this.ctx.service.haigui.algo(platform, 'ETH/USDT') || 'not data';
