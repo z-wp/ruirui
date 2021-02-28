@@ -83,7 +83,8 @@ class HaiguiService extends Service {
     if (coin2Have === undefined) return { success: false, message: '本金币持有量不存在' };
     if (coin2Have < coin2StartLimit) return { success: false, message: '本金币持有量不足脚本启动条件' };
 
-    const unit = coin2Have * percent / algo.atr;
+    const per = 1 / symbolLimit.amount.min;
+    const unit = Math.ceil(coin2Have * percent / algo.atr * per) / per;
     if (unit < symbolLimit.amount.min) return { success: false, message: '计算所得开仓单位小于平台最小下单量' };
 
     const isHoldPosition = coin1Have >= coin1HoldLimit;
@@ -228,7 +229,8 @@ class HaiguiService extends Service {
     if (coin2Have === undefined) return { success: false, message: '本金币持有量不存在' };
     if (coin2Have < coin2StartLimit) return { success: false, message: '本金币持有量不足脚本启动条件' };
 
-    const unit = coin2Have * percent / algo.atr;
+    const per = 1 / symbolLimit.amount.min;
+    const unit = Math.ceil(coin2Have * percent / algo.atr * per) / per;
     if (unit < symbolLimit.amount.min) return { success: false, message: '计算所得开仓单位小于平台最小下单量' };
 
     const isHoldPosition = coin1Have >= coin1HoldLimit;
