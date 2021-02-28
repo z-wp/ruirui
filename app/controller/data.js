@@ -7,7 +7,7 @@ class DataController extends Controller {
   async strategy() {
     const { ctx } = this;
     const res = await this.ctx.service.haigui.allAccountAnalysis();
-    ctx.body = { success: true, data: res };
+    ctx.body = res;
   }
 }
 
