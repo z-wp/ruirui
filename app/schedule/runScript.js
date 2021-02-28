@@ -1,14 +1,20 @@
 'use strict';
 
-module.exports = {
-  schedule: {
-    interval: '30s', // 间隔
-    type: 'worker', // worker每台机器上只有一个 worker 会执行这个定时任务; all指定所有的 worker 都需要执行
-  },
-  async task(ctx) {
+const Subscription = require('egg').Subscription;
 
+class UpdateRunTime extends Subscription {
+  // 通过 schedule 属性来设置定时任务的执行间隔等配置
+  static get schedule() {
+    return {
+      interval: '30s',
+      type: 'worker',
+    };
+  }
+
+  // subscribe 是真正定时任务执行时被运行的函数
+  async subscribe() {
     const startTime = (new Date()).getTime();
-    const res = await ctx.service.haigui.main();
+    const res = await this.ctx.service.haigui.main();
 
     // test-start
     // const start = (new Date()).getTime();
@@ -21,8 +27,9 @@ module.exports = {
 
     if (res) {
       const endTime = (new Date()).getTime();
-      await ctx.service.record.updateScriptStatus(res.success, res.message, endTime - startTime);
+      await this.ctx.service.record.updateScriptStatus(res.success, res.message, endTime - startTime);
     }
+  }
+}
 
-  },
-};
+module.exports = UpdateRunTime;
