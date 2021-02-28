@@ -80,8 +80,8 @@ class HaiguiService extends Service {
     const coin2 = explode[1];
     const coin1Have = balance[coin1] && balance[coin1].free;
     const coin2Have = balance[coin2] && balance[coin2].free;
-    if (coin2Have === undefined) return { success: false, message: 'coin2持有量不存在' };
-    if (coin2Have < coin2StartLimit) return { success: false, message: 'coin2持有量不足脚本启动条件' };
+    if (coin2Have === undefined) return { success: false, message: '本金币持有量不存在' };
+    if (coin2Have < coin2StartLimit) return { success: false, message: '本金币持有量不足脚本启动条件' };
 
     const unit = coin2Have * percent / algo.atr;
     if (unit < symbolLimit.amount.min) return { success: false, message: '计算所得开仓单位小于平台最小下单量' };
@@ -200,6 +200,104 @@ class HaiguiService extends Service {
       this.ctx.logger.error(error.message);
       return { success: false, message: error.message };
     }
+  }
+
+  async strategyAnalysis(conConfig, platform, symbol, percent = 0.01, timeframe = '1d') {
+    if (conConfig && conConfig.timeframe) {
+      timeframe = conConfig.timeframe;
+    }
+    const [ balance, algo, symbolLimit, lastClosePrice ] = await Promise.all([
+      this.ctx.service.apiCcxt.spot(platform),
+      this.algo(platform, symbol, timeframe),
+      this.ctx.service.apiCcxt.marketLimitBySymbol(platform, symbol), // {"amount":{"min":0.001},"price":{"min":0.01},"cost":{"min":0.01}}
+      this.ctx.service.apiCcxt.lastClosePrice(platform, symbol),
+    ]);
+    if (!balance) return { success: false, message: 'balance获取失败' };
+    if (!algo) return { success: false, message: 'algo获取失败' };
+    if (!symbolLimit) return { success: false, message: 'symbol的market limit获取失败' };
+    if (!lastClosePrice) return { success: false, message: 'lastClosePrice获取失败' };
+
+    const coin1HoldLimit = conConfig && conConfig.coin1JoinQuantity || 0;
+    const coin2StartLimit = conConfig && conConfig.coin2JoinQuantity || 0;
+    const explode = this.ctx.service.coin.explodeCoinPair(symbol);
+    const coin1 = explode[0];
+    const coin2 = explode[1];
+    const coin1Have = balance[coin1] && balance[coin1].free;
+    const coin2Have = balance[coin2] && balance[coin2].free;
+    if (coin2Have === undefined) return { success: false, message: '本金币持有量不存在' };
+    if (coin2Have < coin2StartLimit) return { success: false, message: '本金币持有量不足脚本启动条件' };
+
+    const unit = coin2Have * percent / algo.atr;
+    if (unit < symbolLimit.amount.min) return { success: false, message: '计算所得开仓单位小于平台最小下单量' };
+
+    const isHoldPosition = coin1Have >= coin1HoldLimit;
+
+    // 开仓点
+    const open_point = algo.don_open;
+    // 加仓点(在上一次买入（或加仓）的基础上上涨了0.5atr，则加仓一个Unit)
+    // 止损点(比最后一次买入价格下跌2atr时，则卖出全部头寸止损)
+    // 止盈点(价格跌破二分之一n通道下轨，清仓止盈)
+
+    let winPoint;
+    let stopLossPoint;
+    let addPoint;
+    if (isHoldPosition) {
+      // 止盈
+      const winAlgo = await this.algo(platform, symbol, this.ctx.service.coin.timeframeD2(timeframe));
+      if (!winAlgo) return { success: false, message: '止盈点algo获取失败' };
+      winPoint = winAlgo.don_close;
+      const lastBuyPrice = await this.ctx.service.apiCcxt.getLastBuyCoin1Price(platform, symbol);
+      if (!lastBuyPrice) return { success: false, message: '持仓了, 但最近一条记录不是市价加仓记录' };
+      // 止损
+      stopLossPoint = lastBuyPrice - 2 * algo.atr;
+      // 有持仓，突破1/2atr加1单位
+      addPoint = lastBuyPrice + 0.5 * algo.atr;
+    }
+
+    return {
+      success: true,
+      algo,
+      open_point,
+      isHoldPosition,
+      lastClosePrice,
+      winPoint,
+      stopLossPoint,
+      addPoint,
+    };
+
+  }
+
+  async allAccountAnalysis() {
+    const list = [];
+    const accountList = await this.ctx.service.record.findUserConfigs();
+    if (accountList) {
+      for (const account of accountList) {
+        if (account && account.state === 1) {
+
+          let platform;
+          if (account.platform === 'okex') {
+            platform = this.ctx.service.apiCcxt.platformOkex({
+              apiKey: account.apiKey,
+              secret: account.secret,
+              password: account.passphrase || undefined,
+            });
+          }
+          if (!platform) {
+            list.push({
+              success: false,
+              message: `配置的平台${account.platform}暂不支持`,
+            });
+            continue;
+          }
+
+          const res = await this.ctx.service.haigui.strategyAnalysis(account, platform, account.coinPair);
+          if (res) {
+            list.push(res);
+          }
+        }
+      }
+    }
+    return list;
   }
 
 }

@@ -13,4 +13,5 @@ module.exports = app => {
   router.post('/api/account/query', controller.account.query);
   router.post('/api/account/edit', controller.account.edit);
   router.get('/api/script/status', controller.script.status);
+  router.get('/api/data/strategy', controller.data.strategy);
 };
