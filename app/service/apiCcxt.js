@@ -28,7 +28,7 @@ class ApiCcxtService extends Service {
 
   async lastClosePrice(platform, symbol, timeframe = '1m') {
     const data = await platform.fetchOHLCV(symbol, timeframe, undefined, 1);
-    return data && data[0][4];
+    return data && data[0] && data[0][4] || null;
   }
 
   // 获取现货资金量 'account', 'spot', 'margin', 'futures', 'swap'
