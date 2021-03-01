@@ -303,6 +303,13 @@ class HaiguiService extends Service {
           continue;
         }
 
+        // 延时
+        const start = (new Date()).getTime();
+        const delay = 200;
+        while ((new Date()).getTime() - start < delay) {
+          continue;
+        }
+
         const res = await this.ctx.service.haigui.strategyAnalysis(account, platform, account.coinPair);
         if (res) {
           list.push(res);
