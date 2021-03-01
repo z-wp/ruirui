@@ -26,9 +26,14 @@ class ApiCcxtService extends Service {
 
   }
 
-  async lastClosePrice(platform, symbol, timeframe = '1m') {
+  async lastClosePriceByOHLCV(platform, symbol, timeframe = '1m') {
     const data = await platform.fetchOHLCV(symbol, timeframe, undefined, 1);
     return data && data[0] && data[0][4] || null;
+  }
+
+  async lastClosePrice(platform, symbol) {
+    const data = await platform.fetchTicker(symbol);
+    return data && data.last || null;
   }
 
   // 获取现货资金量 'account', 'spot', 'margin', 'futures', 'swap'
