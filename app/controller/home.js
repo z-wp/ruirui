@@ -12,7 +12,7 @@ class HomeController extends Controller {
     // ctx.body = data;
     const platform = this.ctx.service.apiCcxt.platformOkex(this.config.okex);
     const list = await platform.fetchOrdersByState(2, 'ETH/USDT', undefined, 2) || [];
-    ctx.body = { data: list, a: 'a' };
+    ctx.body = { data: list.pop(), a: 'a' };
     // ctx.body = await this.ctx.service.haigui.algo(platform, 'ETH/USDT') || 'not data';
     // ctx.body = await this.ctx.service.apiCcxt.getLastBuyCoin1Price(platform, 'ETH/USDT');
     // ctx.body = await this.ctx.service.haigui.spotStrategy(platform, 'ETH/USDT');
