@@ -71,7 +71,7 @@ class HaiguiService extends Service {
     if (!balance) return { success: false, message: 'balance获取失败' };
     if (!algo) return { success: false, message: 'algo获取失败' };
     if (!symbolLimit) return { success: false, message: 'symbol的market limit获取失败' };
-    if (!lastClosePrice) return { success: false, message: 'lastClosePrice获取失败' };
+    if (!lastClosePrice) return { success: false, message: `${symbol}最新成交价获取失败,超出请求限制` };
 
     const coin1HoldLimit = conConfig && conConfig.coin1JoinQuantity || 0;
     const coin2StartLimit = conConfig && conConfig.coin2JoinQuantity || 0;
