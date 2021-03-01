@@ -32,7 +32,7 @@ class HaiguiService extends Service {
       for (let i = 0; i < len; i++) {
         sum += array[i];
       }
-      return Math.floor(sum / len);
+      return sum / len;
     };
     const atr = avg(trList);
     return {
