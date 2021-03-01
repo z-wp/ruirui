@@ -178,6 +178,13 @@ class HaiguiService extends Service {
               return { success: false, message: `配置的平台${account.platform}暂不支持` };
             }
 
+            // 延时500ms
+            const start = (new Date()).getTime();
+            const delay = 500;
+            while ((new Date()).getTime() - start < delay) {
+              continue;
+            }
+
             // 运行
             // {
             //   id: 2,
