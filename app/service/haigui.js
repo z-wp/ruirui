@@ -219,7 +219,7 @@ class HaiguiService extends Service {
     if (!lastClosePrice) return { success: false, message: 'lastClosePrice获取失败' };
 
     const coin1HoldLimit = conConfig && conConfig.coin1JoinQuantity || 0;
-    const coin2StartLimit = conConfig && conConfig.coin2JoinQuantity || 0;
+    // const coin2StartLimit = conConfig && conConfig.coin2JoinQuantity || 0;
     const explode = this.ctx.service.coin.explodeCoinPair(symbol);
     const coin1 = explode[0];
     const coin2 = explode[1];
@@ -227,11 +227,11 @@ class HaiguiService extends Service {
     const coin2Have = balance[coin2] && balance[coin2].free;
 
     if (coin2Have === undefined) return { success: false, message: '本金币持有量不存在' };
-    if (coin2Have < coin2StartLimit) return { success: false, message: '本金币持有量不足脚本启动条件' };
+    // if (coin2Have < coin2StartLimit) return { success: false, message: '本金币持有量不足脚本启动条件' };
 
     const per = 1 / symbolLimit.amount.min;
     const unit = Math.ceil(coin2Have * percent / algo.atr * per) / per;
-    if (unit < symbolLimit.amount.min) return { success: false, message: '计算所得开仓单位小于平台最小下单量' };
+    // if (unit < symbolLimit.amount.min) return { success: false, message: '计算所得开仓单位小于平台最小下单量' };
 
     const isHoldPosition = coin1Have >= coin1HoldLimit;
 
