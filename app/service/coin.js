@@ -8,7 +8,7 @@ class CoinService extends Service {
     return pair.split('/');
   }
 
-  async timeframeD2(timeframe) {
+  timeframeD2(timeframe) {
     const map = new Map([
       [ '1y', '6M' ],
       [ '6M', '3M' ],
