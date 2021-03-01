@@ -251,7 +251,6 @@ class HaiguiService extends Service {
       if (!winAlgo) return { success: false, message: '止盈点algo获取失败' };
       winPoint = winAlgo.don_close;
       const lastBuyPrice = await this.ctx.service.apiCcxt.getLastBuyCoin1Price(platform, symbol);
-      return lastBuyPrice;
       if (!lastBuyPrice) return { success: false, message: '持仓了, 但最近一条记录不是市价加仓记录' };
       // 止损
       stopLossPoint = lastBuyPrice - 2 * algo.atr;
