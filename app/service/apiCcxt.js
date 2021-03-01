@@ -47,8 +47,9 @@ class ApiCcxtService extends Service {
 
   async getLastBuyCoin1Price(platform, symbol) {
     const list = await platform.fetchOrdersByState(2, symbol, undefined, 2) || [];
-    const item = list && list[0];
-    return item && item.side === 'buy' && item.average || null;
+    return list;
+    // const item = list && list[0];
+    // return item && item.side === 'buy' && item.average || null;
     // [{
     // "timestamp":1613375901000,
     // "datetime":"2021-02-15T07:58:21.000Z",
