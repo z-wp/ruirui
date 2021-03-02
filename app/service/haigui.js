@@ -252,13 +252,14 @@ class HaiguiService extends Service {
     let winPoint;
     let stopLossPoint;
     let addPoint;
+    let lastBuyPrice;
     const addEnd = open_point + 2 * algo.atr;
     if (isHoldPosition) {
       // 止盈
       const winAlgo = await this.algo(platform, symbol, this.ctx.service.coin.timeframeD2(timeframe));
       if (!winAlgo) return { success: false, message: '止盈点algo获取失败' };
       winPoint = winAlgo.don_close;
-      const lastBuyPrice = await this.ctx.service.apiCcxt.getLastBuyCoin1Price(platform, symbol);
+      lastBuyPrice = await this.ctx.service.apiCcxt.getLastBuyCoin1Price(platform, symbol);
       if (!lastBuyPrice) return { success: false, message: '持仓了, 但最近一条记录不是市价加仓记录' };
       // 止损
       stopLossPoint = lastBuyPrice - 2 * algo.atr;
@@ -280,6 +281,7 @@ class HaiguiService extends Service {
       addPoint,
       conConfig,
       symbolLimit,
+      lastBuyPrice,
     };
   }
 
