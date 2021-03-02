@@ -60,12 +60,22 @@ class RecordService extends Service {
   }
 
   async updateScriptStatus(success, message, costTime) {
-    return await this.app.mysql.update('script', {
-      id: 1,
-      success: success ? 1 : 0,
-      message,
-      cost_time: costTime,
-    });
+    let data;
+    if (message !== '') {
+      data = {
+        id: 1,
+        success: success ? 1 : 0,
+        message,
+        cost_time: costTime,
+      };
+    } else {
+      data = {
+        id: 1,
+        success: success ? 1 : 0,
+        cost_time: costTime,
+      };
+    }
+    return await this.app.mysql.update('script', data);
   }
 
   async getScriptStatus() {

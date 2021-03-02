@@ -105,11 +105,11 @@ class HaiguiService extends Service {
         if (!res || !res.info.result) {
           return { success: false, message: `stop win error ${res.info.error_message}` };
         }
-        return { success: true, message: '成功止盈' };
+        return { success: true, message: `${symbol}成功止盈` };
       }
 
       const lastBuyPrice = await this.ctx.service.apiCcxt.getLastBuyCoin1Price(platform, symbol);
-      if (!lastBuyPrice) return { success: false, message: '持仓了, 但最近一条记录不是市价加仓记录' };
+      if (!lastBuyPrice) return { success: false, message: `${symbol}持仓了, 但最近一条记录不是市价加仓记录` };
 
       // 止损
       const stopLossPoint = lastBuyPrice - 2 * algo.atr;
@@ -119,28 +119,29 @@ class HaiguiService extends Service {
         if (!res || !res.info.result) {
           return { success: false, message: `stop loss error ${res.info.error_message}` };
         }
-        return { success: true, message: '成功止损' };
+        return { success: true, message: `${symbol}成功止损` };
       }
 
       // 有持仓，突破1/2atr加1单位
       const addPoint = lastBuyPrice + 0.5 * algo.atr;
       const addEnd = open_point + 2 * algo.atr;
-      if (lastClosePrice > addPoint && lastClosePrice < addEnd) {
+      if (lastClosePrice > addPoint && lastClosePrice < addEnd && unit > symbolLimit.amount.min) {
         const res = await this.addStore(platform, symbol, unit, lastClosePrice);
         if (!res || !res.info.result) {
           return { success: false, message: `addStore again error ${res.info.error_message}` };
         }
-        return { success: true, message: '成功加仓1单位' };
+        return { success: true, message: `${symbol}成功加仓1单位` };
       }
     } else {
-      if (coin2Have < coin2StartLimit) return { success: false, message: '本金币持有量不足脚本预设开仓条件' };
+      if (coin2Have < coin2StartLimit) return { success: true, message: `${symbol}本金币持有量不足脚本预设开仓条件` };
+      if (unit < symbolLimit.amount.min) return { success: true, message: `${symbol}本金币持有量不足平台开仓条件` };
       // 没有持仓，开1单位
       if (lastClosePrice > open_point) {
         const res = await this.addStore(platform, symbol, unit, lastClosePrice);
         if (!res || !res.info.result) {
           return { success: false, message: `addStore error ${res.info.error_message}` };
         }
-        return { success: true, message: '成功开仓1单位' };
+        return { success: true, message: `${symbol}成功开仓1单位` };
       }
     }
     return { success: true, message: '' };
