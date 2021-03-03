@@ -85,7 +85,7 @@ class ApiCcxtService extends Service {
       }
     }
     const map = await platform.fetchTickersByType('spot', pairs);
-    return { info: totalBalance.info, pairsAmount, pairs, map };
+    return { info: totalBalance, pairsAmount, pairs, map };
     // for (const sym of pairsAmount) {
     //   const price = map[sym.pair] && map[sym.pair].last;
     //   if (price) {
