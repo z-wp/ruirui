@@ -285,41 +285,49 @@ class HaiguiService extends Service {
     };
   }
 
-  async allAccountAnalysis() {
+  async allAccountAnalysis(pagenum = 1, pagesize = 5) {
     const list = [];
     const accountList = await this.ctx.service.record.findUserConfigs();
+    let count = 0;
     if (accountList) {
       for (const account of accountList) {
-        let platform;
-        if (account.platform === 'okex') {
-          platform = this.ctx.service.apiCcxt.platformOkex({
-            apiKey: account.apiKey,
-            secret: account.secret,
-            password: account.passphrase || undefined,
-          });
-        }
-        if (!platform) {
-          list.push({
-            success: false,
-            message: `配置的平台${account.platform}暂不支持`,
-          });
-          continue;
+        const start = pagesize * (pagenum - 1);
+        const end = pagesize * pagenum - 1;
+
+        if (count >= start && count <= end) {
+          let platform;
+          if (account.platform === 'okex') {
+            platform = this.ctx.service.apiCcxt.platformOkex({
+              apiKey: account.apiKey,
+              secret: account.secret,
+              password: account.passphrase || undefined,
+            });
+          }
+          if (!platform) {
+            list.push({
+              success: false,
+              message: `配置的平台${account.platform}暂不支持`,
+            });
+            continue;
+          }
+
+          // 延时
+          // const start = (new Date()).getTime();
+          // const delay = 100;
+          // while ((new Date()).getTime() - start < delay) {
+          //   continue;
+          // }
+
+          const res = await this.ctx.service.haigui.strategyAnalysis(account, platform, account.coinPair);
+          if (res) {
+            list.push(res);
+          }
         }
 
-        // 延时
-        const start = (new Date()).getTime();
-        const delay = 150;
-        while ((new Date()).getTime() - start < delay) {
-          continue;
-        }
-
-        const res = await this.ctx.service.haigui.strategyAnalysis(account, platform, account.coinPair);
-        if (res) {
-          list.push(res);
-        }
+        count++;
       }
     }
-    return list;
+    return { list, count };
   }
 
 }
