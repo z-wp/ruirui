@@ -78,6 +78,10 @@ class ApiCcxtService extends Service {
     const pairs = [];
     if (totalBalance && totalBalance.info) {
       for (const item of totalBalance.info) {
+        if (item.currency === 'USDT') {
+          usdt += item.balance;
+          continue;
+        }
         const pair = item.currency + '/USDT';
         const amount = item.balance;
         pairsAmount.push({ pair, amount });
@@ -85,7 +89,7 @@ class ApiCcxtService extends Service {
       }
     }
     const map = await platform.fetchTickersByType('spot', pairs);
-    return { info: totalBalance, pairsAmount, pairs, map };
+    return { pairsAmount, pairs, map };
     // for (const sym of pairsAmount) {
     //   const price = map[sym.pair] && map[sym.pair].last;
     //   if (price) {
