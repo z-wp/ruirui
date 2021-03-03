@@ -79,7 +79,7 @@ class ApiCcxtService extends Service {
     if (totalBalance && totalBalance.info) {
       for (const item of totalBalance.info) {
         if (item.currency === 'USDT') {
-          usdt += item.balance;
+          usdt += Number(item.balance);
           continue;
         }
         const pair = item.currency + '/USDT';
@@ -93,7 +93,7 @@ class ApiCcxtService extends Service {
     for (const sym of pairsAmount) {
       const price = map[sym.pair] && map[sym.pair].last;
       if (price) {
-        usdt += price * sym.amount;
+        usdt += Number(price) * Number(sym.amount);
       }
     }
     return usdt;
