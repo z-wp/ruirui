@@ -8,7 +8,7 @@ class ScriptController extends Controller {
     const { ctx } = this;
     const data = await ctx.service.record.getScriptStatus() || {};
     const res = data && data[0];
-    res.all_time = 30000;
+    res.all_time = 60000;
     ctx.body = { success: true, data: res };
     // {
     //   "success": true,
