@@ -73,7 +73,7 @@ class ApiCcxtService extends Service {
 
   async spotAccountUSDT(platform) {
     let usdt = 0;
-    const totalBalance = await platform.fetchTotalBalance();
+    const totalBalance = await platform.fetchBalance();
     const pairsAmount = [];
     const pairs = [];
     if (totalBalance && totalBalance.info) {
