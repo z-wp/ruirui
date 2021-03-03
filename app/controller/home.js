@@ -25,7 +25,7 @@ class HomeController extends Controller {
 
     const okex = new ccxt.okex(this.config.okex);
     // const data = await okex.fetchTicker('ETH/USDT');
-    const data = await okex.fetchBalance();
+    const data = await okex.fetchMarkets();
     ctx.body = data;
     // const data = await okex.fetchOrdersByState(2, 'ETH/USDT', undefined, 10); // type是limit还是market
     // const list = await okex.fetchOHLCV('ETH/USDT', '1d', undefined, 20);

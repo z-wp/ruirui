@@ -10,6 +10,10 @@ class DataController extends Controller {
     const { list: data, count: total } = await this.ctx.service.haigui.allAccountAnalysis(pagenum);
     ctx.body = { success: true, data, total };
   }
+
+  async accountUSDTChange() {
+
+  }
 }
 
 module.exports = DataController;

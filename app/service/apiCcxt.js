@@ -71,6 +71,18 @@ class ApiCcxtService extends Service {
     // }]
   }
 
+  async spotAccountUSDT(platform) {
+    let usdt = 0;
+    const totalBalance = await platform.fetchTotalBalance();
+    if (totalBalance && totalBalance.info) {
+      for (const item of totalBalance.info) {
+        const pair = item.currency + '/USDT';
+        const amount = item.balance;
+        
+      }
+    }
+  }
+
 }
 
 module.exports = ApiCcxtService;
