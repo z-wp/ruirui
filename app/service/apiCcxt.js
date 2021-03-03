@@ -74,13 +74,24 @@ class ApiCcxtService extends Service {
   async spotAccountUSDT(platform) {
     let usdt = 0;
     const totalBalance = await platform.fetchTotalBalance();
+    const pairsAmount = [];
+    const pairs = [];
     if (totalBalance && totalBalance.info) {
       for (const item of totalBalance.info) {
         const pair = item.currency + '/USDT';
         const amount = item.balance;
-        
+        pairsAmount.push({ pair, amount });
+        pairs.push(pair);
       }
     }
+    const map = await platform.fetchTickersByType('spot', pairs);
+    for (const sym of pairsAmount) {
+      const price = map[sym.pair] && map[sym.pair].last;
+      if (price) {
+        usdt += price * sym.amount;
+      }
+    }
+    return usdt;
   }
 
 }
