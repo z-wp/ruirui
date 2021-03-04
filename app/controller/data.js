@@ -11,8 +11,10 @@ class DataController extends Controller {
     ctx.body = { success: true, data, total };
   }
 
-  async accountUSDTChange() {
-
+  async accountUsdt() {
+    const { ctx } = this;
+    const data = await this.ctx.service.record.moneyChangeList();
+    ctx.body = { success: true, data };
   }
 }
 

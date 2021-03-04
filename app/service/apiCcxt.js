@@ -96,7 +96,7 @@ class ApiCcxtService extends Service {
         usdt += Number(price) * Number(sym.amount);
       }
     }
-    return usdt;
+    return parseInt(usdt);
   }
 
 }

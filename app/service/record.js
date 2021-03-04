@@ -59,6 +59,10 @@ class RecordService extends Service {
     return await this.app.mysql.update('account', data);
   }
 
+  async distinctAccount() {
+    return await this.app.mysql.query('select distinct apiKey from account');
+  }
+
   async updateScriptStatus(success, message, costTime) {
     let data;
     if (message !== '') {
@@ -82,6 +86,72 @@ class RecordService extends Service {
     return await this.app.mysql.select('script', {
       where: { id: 1 },
     });
+  }
+
+  async addMoneyRecord(account, usdt) {
+    const timestamp = (new Date()).getTime();
+    const data = {
+      account,
+      usdt,
+      timestamp,
+    };
+    return await this.app.mysql.insert('money', data);
+  }
+
+  async findAllMoneyRecord() {
+    return await this.app.mysql.select('money', {});
+  }
+
+  async recordAccountMoney() {
+    const accountList = await this.ctx.service.record.findUserConfigs();
+    if (accountList) {
+      const apiKeyList = [];
+      for (const account of accountList) {
+        if (!apiKeyList.includes(account.apiKey)) {
+          let platform;
+          if (account.platform === 'okex') {
+            platform = this.ctx.service.apiCcxt.platformOkex({
+              apiKey: account.apiKey,
+              secret: account.secret,
+              password: account.passphrase || undefined,
+            });
+          }
+          if (!platform) {
+            continue;
+          }
+          // const usdt = await this.ctx.service.apiCcxt.spotAccountUSDT(platform);
+          const usdt = 50;
+          await this.addMoneyRecord(account.apiKey, usdt);
+
+          apiKeyList.push(account.apiKey);
+        }
+      }
+    }
+  }
+
+  async moneyChangeList() {
+    const map = new Map();
+    const records = await this.findAllMoneyRecord();
+    for (const record of records) {
+      const time = new Date(record.timestamp).toJSON().replace(/T.*/, '');
+      const account = record.account;
+      if (map.get(account)) {
+        const data = map.get(account);
+        data.usdt.push(record.usdt);
+        data.time.push(time);
+        map.set(account, data);
+      } else {
+        map.set(account, {
+          usdt: [ record.usdt ],
+          time: [ time ],
+        });
+      }
+    }
+    const obj = Object.create(null);
+    for (const [ k, v ] of map) {
+      obj[k] = v;
+    }
+    return obj;
   }
 }
 
