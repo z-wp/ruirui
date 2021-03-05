@@ -119,8 +119,7 @@ class RecordService extends Service {
           if (!platform) {
             continue;
           }
-          // const usdt = await this.ctx.service.apiCcxt.spotAccountUSDT(platform);
-          const usdt = 50;
+          const usdt = await this.ctx.service.apiCcxt.spotAccountUSDT(platform);
           await this.addMoneyRecord(account.apiKey, usdt);
 
           apiKeyList.push(account.apiKey);
