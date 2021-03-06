@@ -181,7 +181,7 @@ class HaiguiService extends Service {
 
             // 延时500ms
             const start = (new Date()).getTime();
-            const delay = 500;
+            const delay = 600;
             while ((new Date()).getTime() - start < delay) {
               continue;
             }
