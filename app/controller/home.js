@@ -8,7 +8,7 @@ class HomeController extends Controller {
     const { ctx } = this;
 
     const platform = this.ctx.service.apiCcxt.platformBinance(this.config.binance);
-    ctx.body = await this.ctx.service.haigui.algo(platform, 'ETH/USDT');
+    ctx.body = await this.ctx.service.apiCcxt.marketLimitBySymbol(platform, 'ETH/USDT');
     // const price = await this.ctx.service.apiCcxt.lastClosePrice(platform, 'ETH/USDT');
     // const balance = await this.ctx.service.apiCcxt.spot(platform);
     // const eth = balance['ETH'] && balance['ETH'].free;
