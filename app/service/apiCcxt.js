@@ -113,7 +113,12 @@ class ApiCcxtService extends Service {
       }
     }
 
-    const map = await platform.fetchTickersByType('spot', pairs);
+    let map;
+    if (platform.id === 'binance') {
+      map = await platform.fetchTickers(pairs, { type: 'spot' });
+    } else {
+      map = await platform.fetchTickersByType('spot', pairs);
+    }
     // return { pairsAmount, pairs, map };
     for (const sym of pairsAmount) {
       const price = map[sym.pair] && map[sym.pair].last;
