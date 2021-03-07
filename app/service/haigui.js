@@ -68,9 +68,9 @@ class HaiguiService extends Service {
       this.ctx.service.apiCcxt.marketLimitBySymbol(platform, symbol), // {"amount":{"min":0.001},"price":{"min":0.01},"cost":{"min":0.01}}
       this.ctx.service.apiCcxt.lastClosePrice(platform, symbol),
     ]);
-    if (!balance) return { success: false, message: 'balance获取失败' };
-    if (!algo) return { success: false, message: 'algo获取失败' };
-    if (!symbolLimit) return { success: false, message: 'symbol的market limit获取失败' };
+    if (!balance) return { success: false, message: `${symbol}balance获取失败` };
+    if (!algo) return { success: false, message: `${symbol}algo获取失败` };
+    if (!symbolLimit) return { success: false, message: `${symbol}的market limit获取失败` };
     if (!lastClosePrice) return { success: false, message: `${symbol}最新成交价获取失败,超出请求限制` };
 
     const coin1HoldLimit = conConfig && conConfig.coin1JoinQuantity || 0;
@@ -80,11 +80,11 @@ class HaiguiService extends Service {
     const coin2 = explode[1];
     const coin1Have = balance[coin1] && balance[coin1].free;
     const coin2Have = balance[coin2] && balance[coin2].free;
-    if (coin2Have === undefined) return { success: false, message: '本金币持有量不存在' };
+    if (coin2Have === undefined) return { success: false, message: `${symbol}本金币持有量不存在` };
 
     const per = 1 / symbolLimit.amount.min;
     const unit = Math.ceil(coin2Have * percent / algo.atr * per) / per;
-    if (unit < symbolLimit.amount.min) return { success: false, message: '计算所得开仓单位小于平台最小下单量' };
+    if (unit < symbolLimit.amount.min) return { success: false, message: `${symbol}计算所得开仓单位小于平台最小下单量` };
 
     const isHoldPosition = coin1Have >= coin1HoldLimit;
 
@@ -97,7 +97,7 @@ class HaiguiService extends Service {
     if (isHoldPosition) {
       // 止盈
       const winAlgo = await this.algo(platform, symbol, this.ctx.service.coin.timeframeD2(timeframe));
-      if (!winAlgo) return { success: false, message: '止盈点algo获取失败' };
+      if (!winAlgo) return { success: false, message: `${symbol}止盈点algo获取失败` };
       const winPoint = winAlgo.don_close;
       if (lastClosePrice < winPoint) {
         // 清仓止盈

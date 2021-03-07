@@ -8,8 +8,8 @@ class HomeController extends Controller {
     const { ctx } = this;
 
     const platform = this.ctx.service.apiCcxt.platformBinance(this.config.binance);
-    const data = await this.ctx.service.apiCcxt.marketLimitBySymbol(platform, 'ETH/USDT');
-    ctx.body = data;
+    const data = await this.ctx.service.apiCcxt.getLastBuyCoin1Price(platform, 'ETH/USDT');
+    ctx.body = { a: 1, data };
 
     // const data = await this.ctx.service.record.moneyChangeList();
     // ctx.body = data;
