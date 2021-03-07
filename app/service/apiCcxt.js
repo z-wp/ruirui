@@ -57,7 +57,8 @@ class ApiCcxtService extends Service {
   async getLastBuyCoin1Price(platform, symbol) {
     if (platform.id === 'binance') {
       const list = await platform.fetchOrders(symbol, undefined, 1) || [];
-      return list;
+      const item = list && list[0];
+      return item && item.side === 'buy' && item.average || null;
     }
     const list = await platform.fetchOrdersByState(2, symbol, undefined, 2) || [];
     const item = list && list[0];
