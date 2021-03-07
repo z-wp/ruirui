@@ -47,6 +47,11 @@ module.exports = appInfo => {
     password: 'Xiaowei719899730',
   };
 
+  config.binance = {
+    apiKey: '5nvjwG1sMbJHm6tl4JKiqu5q1Bx72Ggm3W5kdwxbpP1YeShMVoVsy0QrRCwVjdyB',
+    secret: 'ndSwWBxZdE5yTaTd7ERFpAqVLFClOelXJ7wYGQnQlXnLF3PjYX031L1zNQOJHbmM',
+  };
+
   config.mysql = {
     // 单数据库信息配置
     client: {

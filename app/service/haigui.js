@@ -174,6 +174,11 @@ class HaiguiService extends Service {
                 secret: account.secret,
                 password: account.passphrase || undefined,
               });
+            } else if (account.platform === 'binance') {
+              platform = this.ctx.service.apiCcxt.platformBinance({
+                apiKey: account.apiKey,
+                secret: account.secret,
+              });
             }
             if (!platform) {
               return { success: false, message: `配置的平台${account.platform}暂不支持` };

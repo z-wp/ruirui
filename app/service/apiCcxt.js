@@ -9,6 +9,10 @@ class ApiCcxtService extends Service {
     return new ccxt.okex(config);
   }
 
+  platformBinance(config) {
+    return new ccxt.binance(config);
+  }
+
   async OHLCV(platform, symbol, timeframe, limit = 20) {
 
     const list = await platform.fetchOHLCV(symbol, timeframe, undefined, limit);

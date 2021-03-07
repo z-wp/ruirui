@@ -7,8 +7,12 @@ class HomeController extends Controller {
   async index() {
     const { ctx } = this;
 
-    const data = await this.ctx.service.record.moneyChangeList();
+    const platform = this.ctx.service.apiCcxt.platformBinance(this.config.binance);
+    const data = await this.ctx.service.haigui.algo(platform, 'ETH/USDT');
     ctx.body = data;
+
+    // const data = await this.ctx.service.record.moneyChangeList();
+    // ctx.body = data;
 
     // const data = this.ctx.service.coin.explodeCoinPair('ETH/USDT');
     // const data = await this.ctx.service.haigui.allAccountAnalysis();
