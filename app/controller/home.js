@@ -10,21 +10,23 @@ class HomeController extends Controller {
     const platform = this.ctx.service.apiCcxt.platformBinance(this.config.binance);
     const symbol = 'ETH/USDT';
     const timeframe = '1h';
-    const percent = 0.01;
-    const [ balance, algo, symbolLimit, lastClosePrice ] = await Promise.all([
-      this.ctx.service.apiCcxt.spot(platform),
-      this.ctx.service.haigui.algo(platform, symbol, timeframe),
-      this.ctx.service.apiCcxt.marketLimitBySymbol(platform, symbol), // {"amount":{"min":0.001},"price":{"min":0.01},"cost":{"min":0.01}}
-      this.ctx.service.apiCcxt.lastClosePrice(platform, symbol),
-    ]);
-    const explode = this.ctx.service.coin.explodeCoinPair(symbol);
-    const coin2 = explode[1];
-    const coin2Have = balance[coin2] && balance[coin2].free;
+    const algo = await this.ctx.service.haigui.algo(platform, symbol, timeframe);
+    ctx.body = { algo };
+    // const percent = 0.01;
+    // const [ balance, algo, symbolLimit, lastClosePrice ] = await Promise.all([
+    //   this.ctx.service.apiCcxt.spot(platform),
+    //   this.ctx.service.haigui.algo(platform, symbol, timeframe),
+    //   this.ctx.service.apiCcxt.marketLimitBySymbol(platform, symbol), // {"amount":{"min":0.001},"price":{"min":0.01},"cost":{"min":0.01}}
+    //   this.ctx.service.apiCcxt.lastClosePrice(platform, symbol),
+    // ]);
+    // const explode = this.ctx.service.coin.explodeCoinPair(symbol);
+    // const coin2 = explode[1];
+    // const coin2Have = balance[coin2] && balance[coin2].free;
 
-    const per = 1 / symbolLimit.amount.min;
-    const unit = Math.ceil(coin2Have * percent / algo.atr * per) / per;
-    const res = await this.ctx.service.haigui.addStore(platform, symbol, unit, lastClosePrice);
-    ctx.body = { res };
+    // const per = 1 / symbolLimit.amount.min;
+    // const unit = Math.ceil(coin2Have * percent / algo.atr * per) / per;
+    // const res = await this.ctx.service.haigui.addStore(platform, symbol, unit, lastClosePrice);
+    // ctx.body = { res };
     // ctx.body = await this.ctx.service.apiCcxt.marketLimitBySymbol(platform, 'ETH/USDT');
     // const price = await this.ctx.service.apiCcxt.lastClosePrice(platform, 'ETH/USDT');
     // const balance = await this.ctx.service.apiCcxt.spot(platform);
