@@ -8,10 +8,12 @@ class HomeController extends Controller {
     const { ctx } = this;
 
     const platform = this.ctx.service.apiCcxt.platformBinance(this.config.binance);
-    const symbol = 'ETH/USDT';
-    const timeframe = '1h';
-    const algo = await this.ctx.service.haigui.algo(platform, symbol, timeframe);
-    ctx.body = { algo };
+    // const symbol = 'ETH/USDT';
+    // const timeframe = '1h';
+    const data = await platform.fetchBalance();
+    ctx.body = data;
+    // const algo = await this.ctx.service.haigui.algo(platform, symbol, timeframe);
+    // ctx.body = { algo };
     // const percent = 0.01;
     // const [ balance, algo, symbolLimit, lastClosePrice ] = await Promise.all([
     //   this.ctx.service.apiCcxt.spot(platform),
