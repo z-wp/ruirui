@@ -10,7 +10,7 @@ class HomeController extends Controller {
     // const platform = this.ctx.service.apiCcxt.platformBinance(this.config.binance);
     // const symbol = 'ETH/USDT';
     // const timeframe = '1h';
-    await this.ctx.service.record.recordAccountMoney();
+    // await this.ctx.service.record.recordAccountMoney();
     ctx.body = 1111;
     // const algo = await this.ctx.service.haigui.algo(platform, symbol, timeframe);
     // ctx.body = { algo };

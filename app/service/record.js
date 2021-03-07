@@ -89,7 +89,7 @@ class RecordService extends Service {
   }
 
   async addMoneyRecord(account, usdt) {
-    const timestamp = (new Date()).getTime() - 3600000;
+    const timestamp = (new Date()).getTime();
     const data = {
       account,
       usdt,
