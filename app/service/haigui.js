@@ -62,16 +62,22 @@ class HaiguiService extends Service {
     if (conConfig && conConfig.timeframe) {
       timeframe = conConfig.timeframe;
     }
-    const [ balance, algo, symbolLimit, lastClosePrice ] = await Promise.all([
+    const [ balance, symbolLimit, lastClosePrice ] = await Promise.all([
       this.ctx.service.apiCcxt.spot(platform),
-      this.algo(platform, symbol, timeframe),
       this.ctx.service.apiCcxt.marketLimitBySymbol(platform, symbol), // {"amount":{"min":0.001},"price":{"min":0.01},"cost":{"min":0.01}}
       this.ctx.service.apiCcxt.lastClosePrice(platform, symbol),
     ]);
+    const algo = await this.algo(platform, symbol, timeframe);
     if (!balance) return { success: false, message: `${symbol}balance获取失败` };
     if (!algo) return { success: false, message: `${symbol}algo获取失败` };
     if (!symbolLimit) return { success: false, message: `${symbol}的market limit获取失败` };
     if (!lastClosePrice) return { success: false, message: `${symbol}最新成交价获取失败,超出请求限制` };
+
+    const start = (new Date()).getTime();
+    const delay = 100;
+    while ((new Date()).getTime() - start < delay) {
+      continue;
+    }
 
     const coin1HoldLimit = conConfig && conConfig.coin1JoinQuantity || 0;
     const coin2StartLimit = conConfig && conConfig.coin2JoinQuantity || 0;
@@ -98,6 +104,12 @@ class HaiguiService extends Service {
       // 止盈
       const winAlgo = await this.algo(platform, symbol, this.ctx.service.coin.timeframeD2(timeframe));
       if (!winAlgo) return { success: false, message: `${symbol}止盈点algo获取失败` };
+
+      const start2 = (new Date()).getTime();
+      while ((new Date()).getTime() - start2 < delay) {
+        continue;
+      }
+
       const winPoint = winAlgo.don_close;
       if (lastClosePrice < winPoint) {
         // 清仓止盈
@@ -186,7 +198,7 @@ class HaiguiService extends Service {
 
             // 延时500ms
             const start = (new Date()).getTime();
-            const delay = 700;
+            const delay = 500;
             while ((new Date()).getTime() - start < delay) {
               continue;
             }
