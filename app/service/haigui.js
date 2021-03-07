@@ -128,7 +128,7 @@ class HaiguiService extends Service {
       if (lastClosePrice > addPoint && lastClosePrice < addEnd && unit > symbolLimit.amount.min) {
         const res = await this.addStore(platform, symbol, unit, lastClosePrice);
         if (!res || !res.info.result) {
-          return { success: false, message: `addStore again error ${res.info.error_message}` };
+          return { success: false, message: `${symbol} addStore again error ${res.info.error_message}` };
         }
         return { success: true, message: `${symbol}成功加仓1单位` };
       }
@@ -139,7 +139,7 @@ class HaiguiService extends Service {
       if (lastClosePrice > open_point) {
         const res = await this.addStore(platform, symbol, unit, lastClosePrice);
         if (!res || !res.info.result) {
-          return { success: false, message: `addStore error ${res.info.error_message}` };
+          return { success: false, message: `${symbol} openStore error ${res.info.error_message}` };
         }
         return { success: true, message: `${symbol}成功开仓1单位` };
       }
@@ -186,7 +186,7 @@ class HaiguiService extends Service {
 
             // 延时500ms
             const start = (new Date()).getTime();
-            const delay = 600;
+            const delay = 700;
             while ((new Date()).getTime() - start < delay) {
               continue;
             }
