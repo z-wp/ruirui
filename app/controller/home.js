@@ -10,7 +10,7 @@ class HomeController extends Controller {
     const platform = this.ctx.service.apiCcxt.platformBinance(this.config.binance);
     // const symbol = 'ETH/USDT';
     // const timeframe = '1h';
-    const data = await platform.fetchBalance();
+    const data = await platform.fetchTickersByType('spot', [ 'ETH/USDT', 'BNB/USDT' ]);
     ctx.body = data;
     // const algo = await this.ctx.service.haigui.algo(platform, symbol, timeframe);
     // ctx.body = { algo };

@@ -85,18 +85,34 @@ class ApiCcxtService extends Service {
     const totalBalance = await platform.fetchBalance();
     const pairsAmount = [];
     const pairs = [];
-    if (totalBalance && totalBalance.info) {
-      for (const item of totalBalance.info) {
-        if (item.currency === 'USDT') {
-          usdt += Number(item.balance);
-          continue;
+    if (platform.id === 'binance') {
+      if (totalBalance && totalBalance.total) {
+        for (const key in totalBalance.total) {
+          if (key === 'USDT') {
+            usdt += Number(totalBalance.total[key]);
+            continue;
+          }
+          const pair = key + '/USDT';
+          const amount = totalBalance.total[key];
+          pairsAmount.push({ pair, amount });
+          pairs.push(pair);
         }
-        const pair = item.currency + '/USDT';
-        const amount = item.balance;
-        pairsAmount.push({ pair, amount });
-        pairs.push(pair);
+      }
+    } else {
+      if (totalBalance && totalBalance.info) {
+        for (const item of totalBalance.info) {
+          if (item.currency === 'USDT') {
+            usdt += Number(item.balance);
+            continue;
+          }
+          const pair = item.currency + '/USDT';
+          const amount = item.balance;
+          pairsAmount.push({ pair, amount });
+          pairs.push(pair);
+        }
       }
     }
+
     const map = await platform.fetchTickersByType('spot', pairs);
     // return { pairsAmount, pairs, map };
     for (const sym of pairsAmount) {
