@@ -10,6 +10,7 @@ import ExportApiCcxt = require('../../../app/service/apiCcxt');
 import ExportCoin = require('../../../app/service/coin');
 import ExportHaigui = require('../../../app/service/haigui');
 import ExportRecord = require('../../../app/service/record');
+import ExportWangge = require('../../../app/service/wangge');
 
 declare module 'egg' {
   interface IService {
@@ -17,5 +18,6 @@ declare module 'egg' {
     coin: AutoInstanceType<typeof ExportCoin>;
     haigui: AutoInstanceType<typeof ExportHaigui>;
     record: AutoInstanceType<typeof ExportRecord>;
+    wangge: AutoInstanceType<typeof ExportWangge>;
   }
 }
