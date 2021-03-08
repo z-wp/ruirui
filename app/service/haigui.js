@@ -114,8 +114,8 @@ class HaiguiService extends Service {
       if (lastClosePrice < winPoint) {
         // 清仓止盈
         const res = await this.clearStore(platform, symbol, coin1Have);
-        if (!res || !res.info.result) {
-          return { success: false, message: `stop win error ${res.info.error_message}` };
+        if (!res || !res.id) {
+          return { success: false, message: `stop win error ${res}` };
         }
         return { success: true, message: `${symbol}成功止盈` };
       }
@@ -128,8 +128,8 @@ class HaiguiService extends Service {
       if (lastClosePrice < stopLossPoint) {
         // 清仓止损
         const res = await this.clearStore(platform, symbol, coin1Have);
-        if (!res || !res.info.result) {
-          return { success: false, message: `stop loss error ${res.info.error_message}` };
+        if (!res || !res.id) {
+          return { success: false, message: `stop loss error ${res}` };
         }
         return { success: true, message: `${symbol}成功止损` };
       }
@@ -139,8 +139,8 @@ class HaiguiService extends Service {
       const addEnd = open_point + 2 * algo.atr;
       if (lastClosePrice > addPoint && lastClosePrice < addEnd && unit > symbolLimit.amount.min) {
         const res = await this.addStore(platform, symbol, unit, lastClosePrice);
-        if (!res || !res.info.result) {
-          return { success: false, message: `${symbol} addStore again error ${res.info.error_message}` };
+        if (!res || !res.id) {
+          return { success: false, message: `${symbol} addStore again error ${res}` };
         }
         return { success: true, message: `${symbol}成功加仓1单位` };
       }
@@ -150,8 +150,8 @@ class HaiguiService extends Service {
       // 没有持仓，开1单位
       if (lastClosePrice > open_point) {
         const res = await this.addStore(platform, symbol, unit, lastClosePrice);
-        if (!res || !res.info.result) {
-          return { success: false, message: `${symbol} openStore error ${res.info.error_message}` };
+        if (!res || !res.id) {
+          return { success: false, message: `${symbol} openStore error ${res}` };
         }
         return { success: true, message: `${symbol}成功开仓1单位` };
       }
@@ -161,8 +161,13 @@ class HaiguiService extends Service {
 
   async addStore(platform, symbol, quantity, price) {
     return await platform.createOrder(symbol, 'market', 'buy', quantity, price);
+    // ok
     // {"info":{"client_oid":"","code":"0","error_code":"0","error_message":"","message":"","order_id":"6511131220335617","result":true},
     // "id":"6511131220335617","symbol":"ETH/USDT","type":"market","side":"buy"}
+
+    // binance
+    // {"info":{"symbol":"ETHUSDT","orderId":3283589236,"orderListId":-1,"clientOrderId":"x-R4BD3S82b751c1971461459aafe270","transactTime":1615214011589,"price":"0.00000000","origQty":"0.08014000","executedQty":"0.08014000","cummulativeQuoteQty":"138.04515700","status":"FILLED","timeInForce":"GTC","type":"MARKET","side":"BUY","fills":[{"price":"1722.55000000","qty":"0.08014000","commission":"0.00044385","commissionAsset":"BNB","tradeId":321319210}]},
+    // "id":"3283589236","clientOrderId":"x-R4BD3S82b751c1971461459aafe270","timestamp":1615214011589,"datetime":"2021-03-08T14:33:31.589Z","symbol":"ETH/USDT","type":"market","timeInForce":"GTC","postOnly":false,"side":"buy","price":1722.5499999999997,"amount":0.08014,"cost":138.045157,"average":1722.5499999999997,"filled":0.08014,"remaining":0,"status":"closed","fee":{"cost":0.00044385,"currency":"BNB"},"trades":[{"info":{"price":"1722.55000000","qty":"0.08014000","commission":"0.00044385","commissionAsset":"BNB","tradeId":321319210},"symbol":"ETH/USDT","price":1722.55,"amount":0.08014,"cost":138.045157,"fee":{"cost":0.00044385,"currency":"BNB"}}]}
   }
 
   async clearStore(platform, symbol, quantity) {
