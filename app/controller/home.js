@@ -9,24 +9,24 @@ class HomeController extends Controller {
 
     const platform = this.ctx.service.apiCcxt.platformBinance(this.config.binance);
     const symbol = 'ETH/USDT';
-    // const timeframe = '1h';
+    const timeframe = '1h';
     // const percent = 0.01;
     // await this.ctx.service.record.recordAccountMoney();
-    const [ balance, symbolLimit, lastClosePrice ] = await Promise.all([
-      this.ctx.service.apiCcxt.spot(platform),
-      this.ctx.service.apiCcxt.marketLimitBySymbol(platform, symbol), // {"amount":{"min":0.001},"price":{"min":0.01},"cost":{"min":0.01}}
-      this.ctx.service.apiCcxt.lastClosePrice(platform, symbol),
-    ]);
-    const explode = this.ctx.service.coin.explodeCoinPair(symbol);
-    const coin1 = explode[0];
-    const coin1Have = balance[coin1] && balance[coin1].free;
-    symbolLimit || lastClosePrice;
+    // const [ balance, symbolLimit, lastClosePrice ] = await Promise.all([
+    //   this.ctx.service.apiCcxt.spot(platform),
+    //   this.ctx.service.apiCcxt.marketLimitBySymbol(platform, symbol), // {"amount":{"min":0.001},"price":{"min":0.01},"cost":{"min":0.01}}
+    //   this.ctx.service.apiCcxt.lastClosePrice(platform, symbol),
+    // ]);
+    // const explode = this.ctx.service.coin.explodeCoinPair(symbol);
+    // const coin1 = explode[0];
+    // const coin1Have = balance[coin1] && balance[coin1].free;
+    // symbolLimit || lastClosePrice;
     // const unit = Math.ceil(coin2Have * percent / algo.atr * per) / per;
     // const res = await this.ctx.service.haigui.addStore(platform, symbol, unit, lastClosePrice);
-    const res = await this.ctx.service.haigui.clearStore(platform, symbol, coin1Have);
-    ctx.body = res;
-    // const algo = await this.ctx.service.haigui.algo(platform, symbol, timeframe);
-    // ctx.body = { algo };
+    // const res = await this.ctx.service.haigui.clearStore(platform, symbol, coin1Have);
+    // ctx.body = res;
+    const algo = await this.ctx.service.haigui.algo(platform, symbol, timeframe);
+    ctx.body = { algo };
     // const percent = 0.01;
     // const [ balance, algo, symbolLimit, lastClosePrice ] = await Promise.all([
     //   this.ctx.service.apiCcxt.spot(platform),
