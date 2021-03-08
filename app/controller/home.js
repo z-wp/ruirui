@@ -17,13 +17,13 @@ class HomeController extends Controller {
       this.ctx.service.apiCcxt.marketLimitBySymbol(platform, symbol), // {"amount":{"min":0.001},"price":{"min":0.01},"cost":{"min":0.01}}
       this.ctx.service.apiCcxt.lastClosePrice(platform, symbol),
     ]);
-    const algo = await this.algo(platform, symbol, timeframe);
+    const algo = await this.ctx.service.haigui.algo(platform, symbol, timeframe);
     const explode = this.ctx.service.coin.explodeCoinPair(symbol);
     const coin2 = explode[1];
     const coin2Have = balance[coin2] && balance[coin2].free;
     const per = 1 / symbolLimit.amount.min;
     const unit = Math.ceil(coin2Have * percent / algo.atr * per) / per;
-    const res = await this.addStore(platform, symbol, unit, lastClosePrice);
+    const res = await this.ctx.service.haigui.addStore(platform, symbol, unit, lastClosePrice);
     ctx.body = res;
     // const algo = await this.ctx.service.haigui.algo(platform, symbol, timeframe);
     // ctx.body = { algo };
