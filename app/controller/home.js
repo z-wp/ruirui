@@ -23,7 +23,7 @@ class HomeController extends Controller {
     symbolLimit || lastClosePrice;
     // const unit = Math.ceil(coin2Have * percent / algo.atr * per) / per;
     // const res = await this.ctx.service.haigui.addStore(platform, symbol, unit, lastClosePrice);
-    const res = await this.clearStore(platform, symbol, coin1Have);
+    const res = await this.ctx.service.haigui.clearStore(platform, symbol, coin1Have);
     ctx.body = res;
     // const algo = await this.ctx.service.haigui.algo(platform, symbol, timeframe);
     // ctx.body = { algo };
