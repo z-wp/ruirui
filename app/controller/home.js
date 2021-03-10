@@ -12,8 +12,8 @@ class HomeController extends Controller {
     // ctx.body = res;
 
     const platform = this.ctx.service.apiCcxt.platformBinance(this.config.binance);
-    // const res = await platform.fetchOrder('3305945041', 'ETH/USDT');
-    const res = await platform.createOrder('ETH/USDT', 'LIMIT', 'sell', 0.01, 1931);
+    const res = await platform.fetchOrder('3306138099', 'ETH/USDT');
+    // const res = await platform.createOrder('ETH/USDT', 'LIMIT', 'sell', 0.01, 1931);
     ctx.body = res;
     // const symbol = 'ETH/USDT';
     // const timeframe = '1h';
