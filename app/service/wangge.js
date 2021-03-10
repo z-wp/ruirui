@@ -136,12 +136,45 @@ class WangGeService extends Service {
     // }
   }
 
-  async openSellOrder() {
-
+  async openSellOrder(platform, symbol, amount, price) {
+    const res = await platform.createOrder(symbol, 'LIMIT', 'sell', amount, price);
+    return res && res.id || null;
+    //   {
+    //     "info":{
+    //         "symbol":"ETHUSDT",
+    //         "orderId":3304696201,
+    //         "orderListId":-1,
+    //         "clientOrderId":"x-R4BD3S82d12990dd7d0e4c2798c3e1",
+    //         "transactTime":1615372545438,
+    //         "price":"2500.00000000",
+    //         "origQty":"0.10000000",
+    //         "executedQty":"0.00000000",
+    //         "cummulativeQuoteQty":"0.00000000",
+    //         "status":"NEW",
+    //         "timeInForce":"GTC",
+    //         "type":"LIMIT",
+    //         "side":"SELL"
+    //     },
+    //     "id":"3304696201",
+    //     "clientOrderId":"x-R4BD3S82d12990dd7d0e4c2798c3e1",
+    //     "timestamp":1615372545438,
+    //     "datetime":"2021-03-10T10:35:45.438Z",
+    //     "symbol":"ETH/USDT",
+    //     "type":"limit",
+    //     "timeInForce":"GTC",
+    //     "postOnly":false,
+    //     "side":"sell",
+    //     "price":2500,
+    //     "amount":0.1,
+    //     "cost":0,
+    //     "filled":0,
+    //     "remaining":0.1,
+    //     "status":"open"
+    // }
   }
 
-  async queryOrderStatus() {
-
+  async queryOrderStatus(orderId) {
+    
   }
 
 }
