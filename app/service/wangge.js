@@ -67,6 +67,7 @@ class WangGeService extends Service {
     const PriceLow = 47500;
     const PriceHigh = 50000;
     const width = 0.006;
+    // TODO 先删再加
     const wangGeList = await this.getWangGeRangeList(PriceLow, PriceHigh, width);
     let sort = 1;
     for (const item of wangGeList) {
@@ -174,7 +175,45 @@ class WangGeService extends Service {
   }
 
   async queryOrderStatus(orderId) {
-    
+
+  //   {
+  //     "info":{
+  //         "symbol":"ETHUSDT",
+  //         "orderId":3304279342,
+  //         "orderListId":-1,
+  //         "clientOrderId":"x-R4BD3S82bebfaf16333b4aaba2e32b",
+  //         "price":"1600.00000000",
+  //         "origQty":"0.10000000",
+  //         "executedQty":"0.00000000",
+  //         "cummulativeQuoteQty":"0.00000000",
+  //         "status":"CANCELED",
+  //         "timeInForce":"GTC",
+  //         "type":"LIMIT",
+  //         "side":"BUY",
+  //         "stopPrice":"0.00000000",
+  //         "icebergQty":"0.00000000",
+  //         "time":1615369063815,
+  //         "updateTime":1615369275420,
+  //         "isWorking":true,
+  //         "origQuoteOrderQty":"0.00000000"
+  //     },
+  //     "id":"3304279342",
+  //     "clientOrderId":"x-R4BD3S82bebfaf16333b4aaba2e32b",
+  //     "timestamp":1615369063815,
+  //     "datetime":"2021-03-10T09:37:43.815Z",
+  //     "symbol":"ETH/USDT",
+  //     "type":"limit",
+  //     "timeInForce":"GTC",
+  //     "postOnly":false,
+  //     "side":"buy",
+  //     "price":1600,
+  //     "stopPrice":0,
+  //     "amount":0.1,
+  //     "cost":0,
+  //     "filled":0,
+  //     "remaining":0.1,
+  //     "status":"canceled"
+  // }
   }
 
 }
