@@ -248,6 +248,46 @@ class WangGeService extends Service {
     //     "remaining":0.1,
     //     "status":"canceled"
     // }
+
+  //   {
+  //     "info":{
+  //         "symbol":"ETHUSDT",
+  //         "orderId":3305945041,
+  //         "orderListId":-1,
+  //         "clientOrderId":"x-R4BD3S82ff970d4709624313a893ae",
+  //         "price":"1831.00000000",
+  //         "origQty":"0.01000000",
+  //         "executedQty":"0.01000000",
+  //         "cummulativeQuoteQty":"18.31750000",
+  //         "status":"FILLED",
+  //         "timeInForce":"GTC",
+  //         "type":"LIMIT",
+  //         "side":"SELL",
+  //         "stopPrice":"0.00000000",
+  //         "icebergQty":"0.00000000",
+  //         "time":1615382434007,
+  //         "updateTime":1615382434007,
+  //         "isWorking":true,
+  //         "origQuoteOrderQty":"0.00000000"
+  //     },
+  //     "id":"3305945041",
+  //     "clientOrderId":"x-R4BD3S82ff970d4709624313a893ae",
+  //     "timestamp":1615382434007,
+  //     "datetime":"2021-03-10T13:20:34.007Z",
+  //     "symbol":"ETH/USDT",
+  //     "type":"limit",
+  //     "timeInForce":"GTC",
+  //     "postOnly":false,
+  //     "side":"sell",
+  //     "price":1831,
+  //     "stopPrice":0,
+  //     "amount":0.01,
+  //     "cost":18.3175,
+  //     "average":1831.7499999999998,
+  //     "filled":0.01,
+  //     "remaining":0,
+  //     "status":"closed"
+  // }
   }
 
 }
