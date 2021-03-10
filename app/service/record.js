@@ -102,6 +102,23 @@ class RecordService extends Service {
     return await this.app.mysql.select('money', {});
   }
 
+  async addWangGeRecord(apiKey, coin, low, high, sort) {
+    const data = {
+      apiKey,
+      coin,
+      low,
+      high,
+      sort,
+    };
+    return await this.app.mysql.insert('wangge', data);
+  }
+
+  async getWangGeRecordList(apiKey, coin) {
+    return await this.app.mysql.select('wangge', {
+      where: { apiKey, coin },
+    });
+  }
+
   async recordAccountMoney() {
     const accountList = await this.ctx.service.record.findUserConfigs();
     if (accountList) {
@@ -157,6 +174,7 @@ class RecordService extends Service {
     }
     return obj;
   }
+
 }
 
 module.exports = RecordService;

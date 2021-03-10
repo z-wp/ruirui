@@ -7,10 +7,19 @@ class HomeController extends Controller {
   async index() {
     const { ctx } = this;
 
+    // const res = await this.ctx.service.wangge.init();
+    // const res = await this.ctx.service.wangge.getAtRange('abcd', 'ETH/USDT', 48888);
+    // ctx.body = res;
+
     const platform = this.ctx.service.apiCcxt.platformBinance(this.config.binance);
-    const symbol = 'ETH/USDT';
-    const timeframe = '1h';
+    const res = platform.createOrder('ETH/USDT', 'LIMIT', 'buy', 0.1, 1600);
+    ctx.body = res;
+    // const symbol = 'ETH/USDT';
+    // const timeframe = '1h';
     // const percent = 0.01;
+    // const algo = await this.ctx.service.haigui.algo(platform, symbol, timeframe);
+    // ctx.body = { algo };
+
     // await this.ctx.service.record.recordAccountMoney();
     // const [ balance, symbolLimit, lastClosePrice ] = await Promise.all([
     //   this.ctx.service.apiCcxt.spot(platform),
@@ -25,8 +34,7 @@ class HomeController extends Controller {
     // const res = await this.ctx.service.haigui.addStore(platform, symbol, unit, lastClosePrice);
     // const res = await this.ctx.service.haigui.clearStore(platform, symbol, coin1Have);
     // ctx.body = res;
-    const algo = await this.ctx.service.haigui.algo(platform, symbol, timeframe);
-    ctx.body = { algo };
+
     // const percent = 0.01;
     // const [ balance, algo, symbolLimit, lastClosePrice ] = await Promise.all([
     //   this.ctx.service.apiCcxt.spot(platform),
