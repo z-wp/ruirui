@@ -6,7 +6,7 @@ class ScriptController extends Controller {
 
   async status() {
     const { ctx } = this;
-    const s = this.ctx.request.query.s;
+    const s = ctx.request.query.s || 'h';
     const data = await ctx.service.record.getScriptStatus(s) || {};
     const res = data && data[0];
     if (s === 'w') {
