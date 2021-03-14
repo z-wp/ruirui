@@ -141,8 +141,8 @@ class WangGeService extends Service {
     const priceList = [];
     let price = PriceHigh;
     while (price > PriceLow) {
-      price = price / (1 + width);
       priceList.push(price);
+      price = price / (1 + width);
     }
     return priceList;
   }

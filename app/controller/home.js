@@ -7,15 +7,15 @@ class HomeController extends Controller {
   async index() {
     const { ctx } = this;
 
-    // const res = await this.ctx.service.wangge.init();
+    const res = await this.ctx.service.wangge.getWangGeRangeList(1750, 1860, 0.006);
     // const res = await this.ctx.service.wangge.getAtRange('abcd', 'ETH/USDT', 48888);
-    // ctx.body = res;
+    ctx.body = res;
 
     // const platform = this.ctx.service.apiCcxt.platformBinance(this.config.binance);
     // const res = await platform.fetchOrder('3306138099', 'ETH/USDT');
     // const res = await platform.createOrder('ETH/USDT', 'LIMIT', 'sell', 0.01, 1931);
-    const res = await this.ctx.service.wangge.main();
-    ctx.body = res;
+    // const res = await this.ctx.service.wangge.main();
+    // ctx.body = res;
     // const symbol = 'ETH/USDT';
     // const timeframe = '1h';
     // const percent = 0.01;

@@ -59,7 +59,7 @@ class AccountController extends Controller {
   async wanggeList() {
     const { ctx } = this;
     const body = ctx.request.body;
-    const list = await ctx.service.wangge.getWangGeRangeList(body.low, body.high, body.width);
+    const list = await ctx.service.wangge.getWangGeRangeList(Number(body.low), Number(body.high), Number(body.width));
     const platform = this.ctx.service.apiCcxt.platformBinance({ apiKey: body.apiKey, secret: body.secret });
     const count = list.length;
     const own = await ctx.service.apiCcxt.spot(platform);
