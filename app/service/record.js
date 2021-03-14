@@ -15,8 +15,12 @@ class RecordService extends Service {
     return data;
   }
 
-  async findUserConfigs() {
-    return await this.app.mysql.select('account', {});
+  async findUserConfigs(strategy = 'haigui') {
+    if (strategy === 'haigui') {
+      return await this.app.mysql.select('account', {});
+    } else if (strategy === 'wangge') {
+      return await this.app.mysql.select('account_wangge', {});
+    }
     // [
     //   {
     //       "id": 1,
@@ -42,25 +46,41 @@ class RecordService extends Service {
     });
   }
 
-  async changeAccountState(id, state) {
-    return await this.app.mysql.update('account', {
+  async changeAccountState(id, state, strategy = 'haigui') {
+    let table = 'account';
+    if (strategy === 'wangge') {
+      table = 'account_wangge';
+    }
+    return await this.app.mysql.update(table, {
       id,
       state,
     });
   }
 
-  async addAccount(data) {
-    return await this.app.mysql.insert('account', data);
+  async addAccount(data, strategy = 'haigui') {
+    let table = 'account';
+    if (strategy === 'wangge') {
+      table = 'account_wangge';
+    }
+    return await this.app.mysql.insert(table, data);
   }
 
-  async findAccount(id) {
-    return await this.app.mysql.select('account', {
+  async findAccount(id, strategy = 'haigui') {
+    let table = 'account';
+    if (strategy === 'wangge') {
+      table = 'account_wangge';
+    }
+    return await this.app.mysql.select(table, {
       where: { id },
     });
   }
 
-  async editAccount(data) {
-    return await this.app.mysql.update('account', data);
+  async editAccount(data, strategy = 'haigui') {
+    let table = 'account';
+    if (strategy === 'wangge') {
+      table = 'account_wangge';
+    }
+    return await this.app.mysql.update(table, data);
   }
 
   async distinctAccount() {
