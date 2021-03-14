@@ -26,6 +26,9 @@ class AccountController extends Controller {
     const strategy = ctx.request.body.s || 'haigui';
     delete body.s;
     const res = await ctx.service.record.addAccount(body, strategy);
+    if (strategy === 'wangge') {
+      await ctx.service.wangge.init(body);
+    }
     ctx.body = { success: !!res };
   }
 
@@ -47,6 +50,9 @@ class AccountController extends Controller {
     const strategy = ctx.request.body.s || 'haigui';
     delete body.s;
     const res = await ctx.service.record.editAccount(body, strategy);
+    if (strategy === 'wangge') {
+      await ctx.service.wangge.init(body);
+    }
     ctx.body = { success: !!res };
   }
 

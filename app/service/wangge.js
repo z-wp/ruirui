@@ -122,14 +122,6 @@ class WangGeService extends Service {
     return { success: true, message: '' };
   }
 
-  async getUnit(config) {
-    const platform = this.ctx.service.apiCcxt.platformBinance({
-      apiKey: config.apiKey,
-      secret: config.secret,
-    });
-    // const list = await this.
-  }
-
   async getWangGeRangeList(PriceLow, PriceHigh, width) {
     const list = await this.getWangGePriceList(PriceLow, PriceHigh, width);
     let p;
@@ -155,20 +147,22 @@ class WangGeService extends Service {
     return priceList;
   }
 
-  async init() {
-    const apiKey = 'abcd';
-    const coin = 'ETH/USDT';
-    const PriceLow = 47500;
-    const PriceHigh = 50000;
-    const width = 0.006;
-    // TODO 先删再加
+  async init(config) {
+    const apiKey = config.apiKey;
+    const coin = config.coin;
+    const PriceLow = config.low;
+    const PriceHigh = config.high;
+    const width = config.width;
+
+    const res = await this.ctx.service.record.deleteWangGeByAccount(config);
+    if (!res) return false;
     const wangGeList = await this.getWangGeRangeList(PriceLow, PriceHigh, width);
     let sort = 1;
     for (const item of wangGeList) {
       await this.ctx.service.record.addWangGeRecord(apiKey, coin, item.low, item.high, sort);
       sort++;
     }
-    return 'ok';
+    return true;
   }
 
   async getAtRange(apiKey, coin, price) {

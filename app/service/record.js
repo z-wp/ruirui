@@ -141,6 +141,12 @@ class RecordService extends Service {
     return await this.app.mysql.insert('wangge', data);
   }
 
+  async deleteWangGeByAccount(config) {
+    return await this.app.mysql.delete('wangge', {
+      where: { apiKey: config.apiKey },
+    });
+  }
+
   async getWangGeRecordList(apiKey, coin) {
     return await this.app.mysql.select('wangge', {
       where: { apiKey, coin },
