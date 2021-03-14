@@ -126,7 +126,7 @@ class WangGeService extends Service {
       apiKey: config.apiKey,
       secret: config.secret,
     });
-    const list = await this.
+    // const list = await this.
   }
 
   async getWangGeRangeList(PriceLow, PriceHigh, width) {
