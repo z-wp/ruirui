@@ -49,6 +49,13 @@ class AccountController extends Controller {
     const res = await ctx.service.record.editAccount(body, strategy);
     ctx.body = { success: !!res };
   }
+
+  async wanggeList() {
+    const { ctx } = this;
+    const body = ctx.request.body;
+    const res = await ctx.service.wangge.getWangGeRangeList(body.low, body.high, body.width);
+    ctx.body = { success: true, data: res };
+  }
 }
 
 module.exports = AccountController;

@@ -12,6 +12,7 @@ module.exports = app => {
   router.post('/api/account/add', controller.account.add);
   router.post('/api/account/query', controller.account.query);
   router.post('/api/account/edit', controller.account.edit);
+  router.post('/api/account/edit/wangge/list', controller.account.wanggeList);
   router.get('/api/script/status', controller.script.status);
   router.get('/api/data/strategy', controller.data.strategy);
   router.get('/api/data/accountUsdt', controller.data.accountUsdt);
