@@ -154,8 +154,8 @@ class WangGeService extends Service {
     const PriceHigh = config.high;
     const width = config.width;
 
-    const res = await this.ctx.service.record.deleteWangGeByAccount(config);
-    if (!res) return false;
+    await this.ctx.service.record.deleteWangGeByAccount(config);
+
     const wangGeList = await this.getWangGeRangeList(PriceLow, PriceHigh, width);
     let sort = 1;
     for (const item of wangGeList) {
