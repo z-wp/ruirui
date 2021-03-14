@@ -24,6 +24,7 @@ class AccountController extends Controller {
     const { ctx } = this;
     const body = ctx.request.body;
     const strategy = ctx.request.body.s || 'haigui';
+    delete body.s;
     const res = await ctx.service.record.addAccount(body, strategy);
     ctx.body = { success: !!res };
   }
@@ -44,6 +45,7 @@ class AccountController extends Controller {
     const { ctx } = this;
     const body = ctx.request.body;
     const strategy = ctx.request.body.s || 'haigui';
+    delete body.s;
     const res = await ctx.service.record.editAccount(body, strategy);
     ctx.body = { success: !!res };
   }
