@@ -4,36 +4,129 @@ const Service = require('egg').Service;
 
 class WangGeService extends Service {
 
+  async test() {
+    // 延时
+    const start = (new Date()).getTime();
+    const delay = 1000;
+    while ((new Date()).getTime() - start < delay) {
+      continue;
+    }
+  }
+
   async main() {
+    // return { success: false, message: '测试' };
+    try {
+      const accountList = await this.ctx.service.record.findWangGeUserConfigs();
+      if (accountList) {
+        for (const account of accountList) {
+          if (account && account.state === 1) {
+
+            let platform;
+            if (account.platform === 'okex') {
+              platform = this.ctx.service.apiCcxt.platformOkex({
+                apiKey: account.apiKey,
+                secret: account.secret,
+                password: account.passphrase || undefined,
+              });
+            } else if (account.platform === 'binance') {
+              platform = this.ctx.service.apiCcxt.platformBinance({
+                apiKey: account.apiKey,
+                secret: account.secret,
+              });
+            }
+            if (!platform) {
+              return { success: false, message: `配置的平台${account.platform}暂不支持` };
+            }
+
+            const res = await this.ctx.service.wangge.runWangGe(platform, account);
+            if (res && !res.success) {
+              return { success: false, message: res.message };
+            }
+          }
+        }
+      }
+
+      return { success: true, message: '' };
+    } catch (error) {
+      this.ctx.logger.error(error.message);
+      return { success: false, message: error.message };
+    }
+  }
+
+  async runWangGe(platform, config) {
     // * 参数 *
     // 最低价、最高价, 最高价需大于等于最低价的1.1倍
     // 进场价（中枢线）
     // 价格间距，等比网格 0.3%-20%
-    const unit = 100;
-    const apiKey = 'abcd';
-    const coin = 'ETH/USDT';
-    const price = 48888;
-    const list = await this.ctx.service.record.getWangGeRecordList(apiKey, coin);
-    let range;
-    for (const item of list) {
-      if (price > item.low && price < item.high) {
-        range = item;
-        break;
-      }
+    const amount = config.amount;
+    const apiKey = config.apiKey;
+    const coin = config.coin;
+    const price = await this.ctx.service.apiCcxt.lastClosePrice(platform, coin);
+    if (!price) {
+      return { success: false, message: `${coin}价格获取失败` };
     }
-    if (!range) return { success: true, message: '不在网格区间内' };
-
-    // 所有有买单卖单的成交状态
-
-    if (range.low_status === 0) {
-      // 未开买单，开买单
-    } else if (range.low_status === 1) {
-      // 买单已成交，开卖单，标记状态，记录订单ID
-    } else if (range.low_status === 2) {
-      // 卖单已成交，开买单
+    const list = await this.ctx.service.record.getWangGeRecordList(apiKey, coin);
+    for (const item of list) {
+      // low_status: 0-未开; 1-开了未成交；2-已成交
+      // 一直查持有的订单状态
+      if (item.low_status === 0) {
+        if (price > item.low) {
+          const buyId = await this.openBuyOrder(platform, coin, amount, item.low);
+          if (buyId) {
+            item.low_status = 1;
+            item.low_order_id = buyId;
+            await this.ctx.service.record.saveWangGeRecord(item);
+          }
+        }
+      } else if (item.low_status === 1 && item.low_order_id) {
+        const buy = await this.queryOrderStatus(platform, item.low_order_id, item.coin);
+        if (buy && buy.status) {
+          if (buy.status === 'canceled') {
+            item.low_status = 0;
+            item.low_order_id = null;
+            await this.ctx.service.record.saveWangGeRecord(item);
+          } else if (buy.status === 'closed') {
+            item.low_status = 2;
+            await this.ctx.service.record.saveWangGeRecord(item);
+          }
+        }
+      } else if (item.low_status === 2 && item.high_status === 0) {
+        const sellId = await this.openSellOrder(platform, coin, amount, item.high);
+        if (sellId) {
+          item.high_status = 1;
+          item.high_order_id = sellId;
+          await this.ctx.service.record.saveWangGeRecord(item);
+        }
+      } else if (item.high_status === 1) {
+        const sell = await this.queryOrderStatus(platform, item.high_order_id, item.coin);
+        if (sell && sell.status) {
+          if (sell.status === 'canceled') {
+            item.high_status = 0;
+            item.high_order_id = null;
+            await this.ctx.service.record.saveWangGeRecord(item);
+          } else if (sell.status === 'closed') {
+            item.high_status = 2;
+            await this.ctx.service.record.saveWangGeRecord(item);
+          }
+        }
+      } else if (item.high_status === 2) {
+        item.low_status = 0;
+        item.low_order_id = null;
+        item.high_status = 0;
+        item.low_order_id = null;
+        await this.ctx.service.record.saveWangGeRecord(item);
+      }
     }
 
     return { success: true, message: '' };
+  }
+
+  async getUnit(config) {
+    const platform = this.ctx.service.apiCcxt.platformBinance({
+      apiKey: config.apiKey,
+      secret: config.secret,
+    });
+    const list = await this.
   }
 
   async getWangGeRangeList(PriceLow, PriceHigh, width) {
@@ -208,8 +301,9 @@ class WangGeService extends Service {
     // }
   }
 
-  async queryOrderStatus(orderId) {
-
+  async queryOrderStatus(platform, orderId, symbol) {
+    const res = await platform.fetchOrder(orderId, symbol);
+    return res && res.status || null;
     //   {
     //     "info":{
     //         "symbol":"ETHUSDT",
@@ -246,7 +340,7 @@ class WangGeService extends Service {
     //     "cost":0,
     //     "filled":0,
     //     "remaining":0.1,
-    //     "status":"canceled"
+    //     "status":"canceled" // 取消
     // }
 
   //   {
@@ -286,7 +380,7 @@ class WangGeService extends Service {
   //     "average":1831.7499999999998,
   //     "filled":0.01,
   //     "remaining":0,
-  //     "status":"closed"
+  //     "status":"closed" // 完成
   // }
   }
 

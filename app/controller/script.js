@@ -6,9 +6,14 @@ class ScriptController extends Controller {
 
   async status() {
     const { ctx } = this;
-    const data = await ctx.service.record.getScriptStatus() || {};
+    const s = this.ctx.request.query.s;
+    const data = await ctx.service.record.getScriptStatus(s) || {};
     const res = data && data[0];
-    res.all_time = 60000;
+    if (s === 'w') {
+      res.all_time = 5000;
+    } else {
+      res.all_time = 60000;
+    }
     ctx.body = { success: true, data: res };
     // {
     //   "success": true,

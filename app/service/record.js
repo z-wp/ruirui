@@ -32,6 +32,10 @@ class RecordService extends Service {
     // ]
   }
 
+  async findWangGeUserConfigs() {
+    return await this.app.mysql.select('account_wangge', {});
+  }
+
   async findCoinConfigs(appKey) {
     return await this.app.mysql.select('coin_config', {
       where: { appKey },
@@ -63,18 +67,18 @@ class RecordService extends Service {
     return await this.app.mysql.query('select distinct apiKey from account');
   }
 
-  async updateScriptStatus(success, message, costTime) {
+  async updateScriptStatus(success, message, costTime, id = 1) {
     let data;
     if (message !== '') {
       data = {
-        id: 1,
+        id,
         success: success ? 1 : 0,
         message,
         cost_time: costTime,
       };
     } else {
       data = {
-        id: 1,
+        id,
         success: success ? 1 : 0,
         cost_time: costTime,
       };
@@ -82,9 +86,13 @@ class RecordService extends Service {
     return await this.app.mysql.update('script', data);
   }
 
-  async getScriptStatus() {
+  async getScriptStatus(s = 'h') {
+    let id = 1;
+    if (s === 'w') {
+      id = 2;
+    }
     return await this.app.mysql.select('script', {
-      where: { id: 1 },
+      where: { id },
     });
   }
 
@@ -117,6 +125,10 @@ class RecordService extends Service {
     return await this.app.mysql.select('wangge', {
       where: { apiKey, coin },
     });
+  }
+
+  async saveWangGeRecord(data) {
+    return await this.app.mysql.update('wangge', data);
   }
 
   async recordAccountMoney() {
