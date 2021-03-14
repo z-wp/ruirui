@@ -57,7 +57,7 @@ class AccountController extends Controller {
     const platform = this.ctx.service.apiCcxt.platformBinance({ apiKey: body.apiKey, secret: body.secret });
     const count = list.length;
     const own = await ctx.service.apiCcxt.spot(platform);
-    ctx.body = { success: true, data: { list, count, own } };
+    ctx.body = { success: true, data: { list, count, own: own && own['USDT'] || null } };
   }
 }
 
