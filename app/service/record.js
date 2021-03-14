@@ -143,7 +143,7 @@ class RecordService extends Service {
 
   async deleteWangGeByAccount(config) {
     return await this.app.mysql.delete('wangge', {
-      where: { apiKey: config.apiKey },
+      apiKey: config.apiKey,
     });
   }
 
