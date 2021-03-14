@@ -11,6 +11,7 @@ class WangGeService extends Service {
     while ((new Date()).getTime() - start < delay) {
       continue;
     }
+    return { success: true, message: '调试中' };
   }
 
   async main() {
