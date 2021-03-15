@@ -81,6 +81,7 @@ class WangGeService extends Service {
         }
       } else if (item.low_status === 1 && item.low_order_id) {
         const buy = await this.queryOrderStatus(platform, item.low_order_id, item.coin);
+        return { success: true, message: '', buy };
         if (buy && buy.status) {
           if (buy.status === 'canceled') {
             item.low_status = 0;

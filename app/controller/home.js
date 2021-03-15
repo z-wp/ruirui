@@ -7,7 +7,7 @@ class HomeController extends Controller {
   async index() {
     const { ctx } = this;
 
-    const res = await this.ctx.service.wangge.getWangGeRangeList(1750, 1860, 0.006);
+    const res = await this.ctx.service.wangge.main();
     // const res = await this.ctx.service.wangge.getAtRange('abcd', 'ETH/USDT', 48888);
     ctx.body = res;
 
