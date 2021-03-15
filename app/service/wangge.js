@@ -119,7 +119,7 @@ class WangGeService extends Service {
         item.low_order_id = null;
         await this.ctx.service.record.saveWangGeRecord(item);
       }
-      return { success: true, message: '3', item };
+      return { success: true, message: '' };
     }
 
     return { success: true, message: '' };
