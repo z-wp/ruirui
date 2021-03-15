@@ -71,7 +71,6 @@ class WangGeService extends Service {
       // low_status: 0-未开; 1-开了未成交；2-已成交
       // 一直查持有的订单状态
       if (item.low_status === 0) {
-        return { success: false, message: '1', item };
         if (price > item.low) {
           const buyId = await this.openBuyOrder(platform, coin, amount, item.low);
           if (buyId) {
@@ -81,8 +80,8 @@ class WangGeService extends Service {
           }
         }
       } else if (item.low_status === 1 && item.low_order_id) {
-        return { success: false, message: '2', item };
         const buy = await this.queryOrderStatus(platform, item.low_order_id, item.coin);
+        return { success: false, message: buy };
         if (buy && buy.status) {
           if (buy.status === 'canceled') {
             item.low_status = 0;
