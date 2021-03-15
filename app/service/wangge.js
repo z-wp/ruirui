@@ -47,7 +47,7 @@ class WangGeService extends Service {
         }
       }
 
-      return { success: true, message: '' };
+      return { success: true, message: 'ok' };
     } catch (error) {
       this.ctx.logger.error(error.message);
       return { success: false, message: error.message };
@@ -122,7 +122,7 @@ class WangGeService extends Service {
       return { success: true, message: '3', item };
     }
 
-    return { success: true, message: '' };
+    return { success: true, message: 'no range' };
   }
 
   async getWangGeRangeList(PriceLow, PriceHigh, width) {
