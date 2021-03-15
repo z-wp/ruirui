@@ -47,7 +47,7 @@ class WangGeService extends Service {
         }
       }
 
-      return { success: true, message: 'ok' };
+      return { success: true, message: '' };
     } catch (error) {
       this.ctx.logger.error(error.message);
       return { success: false, message: error.message };
@@ -121,7 +121,6 @@ class WangGeService extends Service {
         item.low_order_id = null;
         await this.ctx.service.record.saveWangGeRecord(item);
       }
-      return { success: true, message: '' };
     }
 
     return { success: true, message: '' };
