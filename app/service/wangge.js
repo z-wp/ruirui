@@ -81,7 +81,6 @@ class WangGeService extends Service {
         }
       } else if (item.low_status === 1 && item.low_order_id) {
         const buy = await this.queryOrderStatus(platform, item.low_order_id, item.coin);
-        return { success: false, message: buy };
         if (buy && buy.status) {
           if (buy.status === 'canceled') {
             item.low_status = 0;
@@ -93,7 +92,11 @@ class WangGeService extends Service {
           }
         }
       } else if (item.low_status === 2 && item.high_status === 0) {
-        const sellId = await this.openSellOrder(platform, coin, amount, item.high);
+        let sellPrice = item.high;
+        if (price > sellPrice) {
+          sellPrice = price;
+        }
+        const sellId = await this.openSellOrder(platform, coin, amount, sellPrice);
         if (sellId) {
           item.high_status = 1;
           item.high_order_id = sellId;
@@ -300,7 +303,7 @@ class WangGeService extends Service {
 
   async queryOrderStatus(platform, orderId, symbol) {
     const res = await platform.fetchOrder(orderId, symbol);
-    return res && res.status || null;
+    return res || null;
     //   {
     //     "info":{
     //         "symbol":"ETHUSDT",
