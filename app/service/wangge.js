@@ -96,7 +96,9 @@ class WangGeService extends Service {
         if (price > sellPrice) {
           sellPrice = price;
         }
-        const sellId = await this.openSellOrder(platform, coin, amount, sellPrice);
+        const buy = await this.queryOrderStatus(platform, item.low_order_id, item.coin);
+        const sellAmount = (buy && buy.amount) || amount;
+        const sellId = await this.openSellOrder(platform, coin, sellAmount, sellPrice);
         if (sellId) {
           item.high_status = 1;
           item.high_order_id = sellId;
