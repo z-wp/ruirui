@@ -106,6 +106,19 @@ class ApiCcxtService extends Service {
           pairs.push(pair);
         }
       }
+    } else if (platform.id === 'huobipro') {
+      if (totalBalance && totalBalance.info && totalBalance.info.data && totalBalance.info.data.list) {
+        for (const item of totalBalance.info.data.list) {
+          if (item.currency === 'USDT') {
+            usdt += Number(item.balance);
+            continue;
+          }
+          const pair = item.currency + '/USDT';
+          const amount = item.balance;
+          pairsAmount.push({ pair, amount });
+          pairs.push(pair);
+        }
+      }
     } else {
       if (totalBalance && totalBalance.info) {
         for (const item of totalBalance.info) {
