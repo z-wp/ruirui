@@ -1,7 +1,7 @@
 'use strict';
 
 const Controller = require('egg').Controller;
-const ccxt = require('ccxt');
+// const ccxt = require('ccxt');
 
 class HomeController extends Controller {
   async index() {
@@ -12,13 +12,18 @@ class HomeController extends Controller {
     // ctx.body = res;
 
     const symbol = 'ETH/USDT';
-    const timeframe = '1h';
+    // const timeframe = '1h';
     // const percent = 0.01;
     const platform = this.ctx.service.apiCcxt.platformHuobi(this.config.huobi);
-    const algoHuobi = await this.ctx.service.haigui.algo(platform, symbol, timeframe);
-    const platformBi = this.ctx.service.apiCcxt.platformBinance(this.config.binance);
-    const algoBi = await this.ctx.service.haigui.algo(platformBi, symbol, timeframe);
-    ctx.body = { algoHuobi, algoBi };
+    // const algoHuobi = await this.ctx.service.haigui.algo(platform, symbol, timeframe);
+    // const platformBi = this.ctx.service.apiCcxt.platformBinance(this.config.binance);
+    // const algoBi = await this.ctx.service.haigui.algo(platformBi, symbol, timeframe);
+    const [ balance, symbolLimit, lastClosePrice ] = await Promise.all([
+      this.ctx.service.apiCcxt.spot(platform),
+      this.ctx.service.apiCcxt.marketLimitBySymbol(platform, symbol), // {"amount":{"min":0.001},"price":{"min":0.01},"cost":{"min":0.01}}
+      this.ctx.service.apiCcxt.lastClosePrice(platform, symbol),
+    ]);
+    ctx.body = { balance, symbolLimit, lastClosePrice };
 
     // const platform = this.ctx.service.apiCcxt.platformBinance(this.config.binance);
     // const res = await platform.fetchOrder('3306138099', 'ETH/USDT');

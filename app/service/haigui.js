@@ -196,6 +196,11 @@ class HaiguiService extends Service {
                 apiKey: account.apiKey,
                 secret: account.secret,
               });
+            } else if (account.platform === 'huobi') {
+              platform = this.ctx.service.apiCcxt.platformHuobi({
+                apiKey: account.apiKey,
+                secret: account.secret,
+              });
             }
             if (!platform) {
               return { success: false, message: `配置的平台${account.platform}暂不支持` };
@@ -326,6 +331,11 @@ class HaiguiService extends Service {
             });
           } else if (account.platform === 'binance') {
             platform = this.ctx.service.apiCcxt.platformBinance({
+              apiKey: account.apiKey,
+              secret: account.secret,
+            });
+          } else if (account.platform === 'huobi') {
+            platform = this.ctx.service.apiCcxt.platformHuobi({
               apiKey: account.apiKey,
               secret: account.secret,
             });
