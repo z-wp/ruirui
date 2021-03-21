@@ -23,8 +23,8 @@ class HomeController extends Controller {
     //   this.ctx.service.apiCcxt.marketLimitBySymbol(platform, symbol), // {"amount":{"min":0.001},"price":{"min":0.01},"cost":{"min":0.01}}
     //   this.ctx.service.apiCcxt.lastClosePrice(platform, symbol),
     // ]);
-    // const symbolLimit = await this.ctx.service.apiCcxt.marketLimitBySymbol(platform, symbol);
-    // ctx.body = { symbolLimit };
+    const symbolLimit = await this.ctx.service.apiCcxt.marketLimitBySymbol(platform, symbol);
+    ctx.body = { symbolLimit };
 
     // const platform = this.ctx.service.apiCcxt.platformBinance(this.config.binance);
     // const res = await platform.fetchOrder('3306138099', 'ETH/USDT');
@@ -48,11 +48,11 @@ class HomeController extends Controller {
     // const coin1Have = balance[coin1] && balance[coin1].free;
     // symbolLimit || lastClosePrice;
     // const unit = Math.ceil(coin2Have * percent / algo.atr * per) / per;
-    const coin1Have = 0.005;
+    // const coin1Have = 0.005;
     // const lastClosePrice = await this.ctx.service.apiCcxt.lastClosePrice(platform, symbol);
     // const res = await this.ctx.service.haigui.addStore(platform, symbol, unit, lastClosePrice);
-    const res = await this.ctx.service.haigui.clearStore(platform, symbol, coin1Have);
-    ctx.body = res;
+    // const res = await this.ctx.service.haigui.clearStore(platform, symbol, coin1Have);
+    // ctx.body = res;
 
     // const percent = 0.01;
     // const [ balance, algo, symbolLimit, lastClosePrice ] = await Promise.all([
