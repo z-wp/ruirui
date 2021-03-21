@@ -18,12 +18,13 @@ class HomeController extends Controller {
     // const algoHuobi = await this.ctx.service.haigui.algo(platform, symbol, timeframe);
     // const platformBi = this.ctx.service.apiCcxt.platformBinance(this.config.binance);
     // const algoBi = await this.ctx.service.haigui.algo(platformBi, symbol, timeframe);
-    const [ balance, symbolLimit, lastClosePrice ] = await Promise.all([
-      this.ctx.service.apiCcxt.spot(platform),
-      this.ctx.service.apiCcxt.marketLimitBySymbol(platform, symbol), // {"amount":{"min":0.001},"price":{"min":0.01},"cost":{"min":0.01}}
-      this.ctx.service.apiCcxt.lastClosePrice(platform, symbol),
-    ]);
-    ctx.body = { balance, symbolLimit, lastClosePrice };
+    // const [ balance, symbolLimit, lastClosePrice ] = await Promise.all([
+    //   this.ctx.service.apiCcxt.spot(platform),
+    //   this.ctx.service.apiCcxt.marketLimitBySymbol(platform, symbol), // {"amount":{"min":0.001},"price":{"min":0.01},"cost":{"min":0.01}}
+    //   this.ctx.service.apiCcxt.lastClosePrice(platform, symbol),
+    // ]);
+    const markets = await platform.fetchMarkets();
+    ctx.body = { markets };
 
     // const platform = this.ctx.service.apiCcxt.platformBinance(this.config.binance);
     // const res = await platform.fetchOrder('3306138099', 'ETH/USDT');
