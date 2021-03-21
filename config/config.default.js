@@ -52,6 +52,11 @@ module.exports = appInfo => {
     secret: 'ndSwWBxZdE5yTaTd7ERFpAqVLFClOelXJ7wYGQnQlXnLF3PjYX031L1zNQOJHbmM',
   };
 
+  config.huobi = {
+    apiKey: '3f83a4c5-d393af11-4ebbc5cb-vfd5ghr532',
+    secret: 'ab321e7b-81a5f593-8a0f91ba-dd8bc',
+  };
+
   config.mysql = {
     // 单数据库信息配置
     client: {

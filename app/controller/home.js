@@ -7,9 +7,18 @@ class HomeController extends Controller {
   async index() {
     const { ctx } = this;
 
-    const res = await this.ctx.service.wangge.main();
+    // const res = await this.ctx.service.wangge.main();
     // const res = await this.ctx.service.wangge.getAtRange('abcd', 'ETH/USDT', 48888);
-    ctx.body = res;
+    // ctx.body = res;
+
+    const symbol = 'ETH/USDT';
+    const timeframe = '1h';
+    // const percent = 0.01;
+    const platform = this.ctx.service.apiCcxt.platformHuobi(this.config.huobi);
+    const algoHuobi = await this.ctx.service.haigui.algo(platform, symbol, timeframe);
+    const platformBi = this.ctx.service.apiCcxt.platformBinance(this.config.binance);
+    const algoBi = await this.ctx.service.haigui.algo(platformBi, symbol, timeframe);
+    ctx.body = { algoHuobi, algoBi };
 
     // const platform = this.ctx.service.apiCcxt.platformBinance(this.config.binance);
     // const res = await platform.fetchOrder('3306138099', 'ETH/USDT');

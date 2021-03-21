@@ -13,6 +13,10 @@ class ApiCcxtService extends Service {
     return new ccxt.binance(config);
   }
 
+  platformHuobi(config) {
+    return new ccxt.huobipro(config);
+  }
+
   async OHLCV(platform, symbol, timeframe, limit = 20) {
 
     const list = await platform.fetchOHLCV(symbol, timeframe, undefined, limit);
