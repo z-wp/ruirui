@@ -48,7 +48,7 @@ class HomeController extends Controller {
     // const coin1Have = balance[coin1] && balance[coin1].free;
     // symbolLimit || lastClosePrice;
     // const unit = Math.ceil(coin2Have * percent / algo.atr * per) / per;
-    const unit = 0.002;
+    const unit = 0.005;
     const lastClosePrice = await this.ctx.service.apiCcxt.lastClosePrice(platform, symbol);
     const res = await this.ctx.service.haigui.addStore(platform, symbol, unit, lastClosePrice);
     // const res = await this.ctx.service.haigui.clearStore(platform, symbol, coin1Have);
