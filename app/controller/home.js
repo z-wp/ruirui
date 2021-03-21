@@ -25,7 +25,7 @@ class HomeController extends Controller {
     // ]);
     // const symbolLimit = await this.ctx.service.apiCcxt.marketLimitBySymbol(platform, symbol);
     const pairs = [ symbol ];
-    const totalBalance = await await platform.fetchTickersByType('spot', pairs);
+    const totalBalance = await platform.fetchTickers(pairs, { type: 'spot' });
     ctx.body = { totalBalance };
 
     // const platform = this.ctx.service.apiCcxt.platformBinance(this.config.binance);
