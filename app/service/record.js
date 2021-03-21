@@ -175,6 +175,11 @@ class RecordService extends Service {
               apiKey: account.apiKey,
               secret: account.secret,
             });
+          } else if (account.platform === 'huobi') {
+            platform = this.ctx.service.apiCcxt.platformHuobi({
+              apiKey: account.apiKey,
+              secret: account.secret,
+            });
           }
           if (!platform) {
             continue;
