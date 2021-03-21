@@ -23,8 +23,8 @@ class HomeController extends Controller {
     //   this.ctx.service.apiCcxt.marketLimitBySymbol(platform, symbol), // {"amount":{"min":0.001},"price":{"min":0.01},"cost":{"min":0.01}}
     //   this.ctx.service.apiCcxt.lastClosePrice(platform, symbol),
     // ]);
-    const markets = await platform.fetchMarkets();
-    ctx.body = { markets };
+    const symbolLimit = await this.ctx.service.apiCcxt.marketLimitBySymbol(platform, symbol);
+    ctx.body = { symbolLimit };
 
     // const platform = this.ctx.service.apiCcxt.platformBinance(this.config.binance);
     // const res = await platform.fetchOrder('3306138099', 'ETH/USDT');

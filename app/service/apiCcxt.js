@@ -51,6 +51,10 @@ class ApiCcxtService extends Service {
   }
 
   async marketLimitBySymbol(platform, symbol, type = 'spot') {
+    if (platform.id === 'huobipro') {
+      const data = (await platform.fetchMarkets()).filter(item => item.symbol === symbol).shift();
+      return data && data.limits || null;
+    }
     const data = (await platform.fetchMarkets()).filter(item => item.type === type && item.symbol === symbol).shift();
     return data && data.limits || null;
     // {"taker":0.0015,"maker":0.001,"id":"ETH-USDT","symbol":"ETH/USDT","base":"ETH","quote":"USDT","baseId":"ETH","quoteId":"USDT",
