@@ -135,7 +135,7 @@ class ApiCcxtService extends Service {
     }
 
     let map;
-    if (platform.id === 'binance') {
+    if (platform.id === 'binance' || platform.id === 'huobipro') {
       map = await platform.fetchTickers(pairs, { type: 'spot' });
     } else {
       map = await platform.fetchTickersByType('spot', pairs);
